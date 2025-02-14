@@ -20,11 +20,12 @@ open class BaseViewModel<T>(
         }
     }
 
-    protected fun DeferredData<T>.getDeferredData(
+    protected fun <T> getDeferredData(
+        currentState: DeferredData<T>,
         action: suspend () -> T,
         data: (DeferredData<T>) -> Unit
     ) {
-        if(isLoading) return
+        if(currentState.isLoading) return
         data(Fetching)
         viewModelScope.launch(Dispatchers.Default) {
             runCatching {

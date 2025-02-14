@@ -62,6 +62,9 @@ kotlin {
             implementation(libs.kotlinx.serialization.json)
             implementation(libs.kstore)
 
+            implementation(libs.multiplatform.settings)
+            implementation(libs.multiplatform.settings.no.arg)
+
         }
     }
 }
