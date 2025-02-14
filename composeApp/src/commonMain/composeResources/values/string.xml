@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources>
+    <string name="app_name">نیواپ</string>
+    <string name="login_screen_title">ورود به حساب کاربری</string>
+    <string name="splash_app_info">نیواپ | v1.0.0</string>
+</resources>

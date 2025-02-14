@@ -12,26 +12,37 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import ir.niv.app.NivTheme
-import ir.niv.app.domain.splash.LoggedInUserRepository
 import ir.niv.app.ui.core.isLoading
+import ir.niv.app.ui.core.onRetrieve
+import ir.niv.app.ui.login.graph.LoginRoute
+import ir.niv.app.ui.utils.LocalNavController
+import niv.design.designsystem.theme.NivTheme
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.logo
+import nivapp.composeapp.generated.resources.splash_app_info
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SplashScreen(modifier: Modifier = Modifier) {
-    Scaffold(
-        modifier = modifier
-    ) {
+    Scaffold(modifier = modifier) {
         val viewModel: SplashViewModel = koinViewModel()
         val state = viewModel.state.collectAsStateWithLifecycle().value
+        val navController = LocalNavController.current
+        LaunchedEffect(state) {
+            state.onRetrieve {
+                if(!it) {
+                    navController.popBackStack()
+                    navController.navigate(LoginRoute)
+                }
+            }
+        }
         Box(
             modifier = Modifier.fillMaxSize().padding(it)
         ) {
@@ -59,7 +70,7 @@ fun SplashScreen(modifier: Modifier = Modifier) {
 
             Text(
                 modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 32.dp),
-                text = "نیواپ | v1.0.0",
+                text = stringResource(Res.string.splash_app_info),
                 style = NivTheme.typography.bodyMedium
             )
         }

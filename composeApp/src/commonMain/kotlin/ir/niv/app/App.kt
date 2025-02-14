@@ -7,8 +7,11 @@ import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import ir.niv.app.di.koinModules
+import ir.niv.app.ui.login.graph.loginGraph
 import ir.niv.app.ui.splash.graph.SplashRoute
 import ir.niv.app.ui.splash.graph.splashNavGraph
+import ir.niv.app.ui.utils.LocalNavController
+import niv.design.designsystem.theme.NivTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
 
@@ -20,12 +23,16 @@ fun App() {
     ) {
         NivTheme {
             val navController = rememberNavController()
-            CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+            CompositionLocalProvider(
+                LocalLayoutDirection provides LayoutDirection.Rtl,
+                LocalNavController provides navController
+            ) {
                 NavHost(
                     navController = navController,
                     startDestination = SplashRoute
                 ) {
                     splashNavGraph()
+                    loginGraph()
                 }
             }
         }
