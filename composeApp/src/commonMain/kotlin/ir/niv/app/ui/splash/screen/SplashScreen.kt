@@ -23,15 +23,14 @@ import ir.niv.app.ui.core.isLoading
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.logo
 import org.jetbrains.compose.resources.painterResource
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun SplashScreen(modifier: Modifier = Modifier) {
     Scaffold(
         modifier = modifier
     ) {
-        val viewModel = remember {
-            SplashViewModel(LoggedInUserRepository())
-        }
+        val viewModel: SplashViewModel = koinViewModel()
         val state = viewModel.state.collectAsStateWithLifecycle().value
         Box(
             modifier = Modifier.fillMaxSize().padding(it)
