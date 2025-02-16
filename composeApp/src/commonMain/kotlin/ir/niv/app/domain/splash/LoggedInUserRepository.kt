@@ -1,7 +1,10 @@
 package ir.niv.app.domain.splash
 
-import ir.niv.app.domain.core.settings
+import ir.niv.app.domain.repository.LocalStorage
+import ir.niv.app.domain.repository.data
 
-class LoggedInUserRepository {
-    val id: Long = settings.getLong("User_Id", -1)
+class LoggedInUserRepository(
+    localStorage: LocalStorage
+) {
+    val id: Long by localStorage.data("User_Id", -1)
 }

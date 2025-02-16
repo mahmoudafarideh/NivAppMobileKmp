@@ -1,0 +1,18 @@
+package ir.niv.app.data.login
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class NumberRegisterDto(
+    @SerialName("response")
+    val state: StateDto
+) {
+    enum class StateDto {
+        @SerialName("login")
+        Login,
+
+        @SerialName("verify_phone")
+        VerifyPhone
+    }
+}

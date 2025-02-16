@@ -24,6 +24,8 @@ kotlin {
                 outputFileName = "nivApp.js"
             }
         }
+        this.useCommonJs()
+        this.generateTypeScriptDefinitions()
         binaries.executable()
     }
 
@@ -66,8 +68,11 @@ kotlin {
             implementation(libs.androidx.activity.compose)
             implementation(libs.kstore.file)
 
+            implementation(libs.kotlinx.serialization.json)
             implementation(libs.koin.android)
             implementation(libs.koin.android.compose)
+
+            implementation(libs.ktor.client.android)
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -92,6 +97,12 @@ kotlin {
             implementation(libs.koin.compose.vm)
 
             implementation(project(":designsystem"))
+
+            implementation(libs.ktor.client.core)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.serialization)
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.client.auth)
 
         }
     }
