@@ -15,7 +15,7 @@ fun traceErrorException(throwable: Throwable?): ApiError {
     val message: String = throwable?.message ?: "UNKNOWN_ERROR_MESSAGE"
     var toast: ApiError.Toast? = null
 
-    TODO()
+    return ApiError(message, errorCode, ApiError.ErrorStatus.TIMEOUT, toast, inputErrors)
 //    when (throwable) {
 //        is HttpException -> {
 //            val errorJson = getErrorBody(throwable.response())
