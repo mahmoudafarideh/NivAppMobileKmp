@@ -31,10 +31,9 @@ ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "k
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktorClientJava" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientJava" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientJava" }
-ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktorClientJs" }
-ktor-client-java = { module = "io.ktor:ktor-client-java", version.ref = "ktorClientJava" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorClientJava" }
 ktor-client-serialization = { module = "io.ktor:ktor-client-serialization", version.ref = "ktorClientJava" }
+ktor-client-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientJava" }
 multiplatform-settings = { module = "com.russhwolf:multiplatform-settings", version.ref = "multiplatformSettings" }
 multiplatform-settings-no-arg = { module = "com.russhwolf:multiplatform-settings-no-arg", version.ref = "multiplatformSettingsNoArg" }
 navigation-compose = { module = "org.jetbrains.androidx.navigation:navigation-compose", version.ref = "navigationCompose" }

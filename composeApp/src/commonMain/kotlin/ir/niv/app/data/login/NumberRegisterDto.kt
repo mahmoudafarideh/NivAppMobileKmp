@@ -8,6 +8,7 @@ data class NumberRegisterDto(
     @SerialName("response")
     val state: StateDto
 ) {
+    @Serializable
     enum class StateDto {
         @SerialName("login")
         Login,

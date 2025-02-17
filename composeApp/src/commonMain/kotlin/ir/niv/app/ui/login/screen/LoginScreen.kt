@@ -15,6 +15,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -39,6 +40,7 @@ internal fun LoginScreen(
 ) {
     val viewModel: LoginViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
+    val phoneError by viewModel.apiErrors("phone_number").collectAsStateWithLifecycle(null)
     val localSnackBar = LocalSnackBarHostState.current
     LaunchedEffect(state.submitState) {
         (state.submitState as? FailedApi)?.error?.message?.let {
@@ -82,6 +84,7 @@ internal fun LoginScreen(
                         onNumberChange = {
                             viewModel.phoneNumberChanged(it)
                         },
+                        error = phoneError,
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                     )
                     Spacer(modifier = Modifier.height(64.dp))

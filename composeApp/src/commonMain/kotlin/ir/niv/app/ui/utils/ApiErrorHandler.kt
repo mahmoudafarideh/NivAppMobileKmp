@@ -1,6 +1,17 @@
 package ir.niv.app.ui.utils
 
+import io.ktor.client.plugins.ClientRequestException
+import io.ktor.client.plugins.HttpRequestTimeoutException
+import io.ktor.client.statement.bodyAsText
+import io.ktor.utils.io.InternalAPI
 import ir.niv.app.ui.core.ApiError
+import kotlinx.io.IOException
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonArray
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.jsonArray
+import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.jsonPrimitive
 
 
 /**
@@ -8,35 +19,46 @@ import ir.niv.app.ui.core.ApiError
  * depending on what exception returns [ApiError]
  *
  * */
-fun traceErrorException(throwable: Throwable?): ApiError {
+suspend fun traceErrorException(throwable: Throwable?): ApiError {
     val errorStatus: ApiError.ErrorStatus
     var inputErrors: Map<String, String>? = null
     var errorCode = 0
     val message: String = throwable?.message ?: "UNKNOWN_ERROR_MESSAGE"
     var toast: ApiError.Toast? = null
+    when (throwable) {
+        is ClientRequestException -> {
+            val errorJson = getErrorBody(throwable.response.bodyAsText())
+            errorJson?.let {
+                toast = getToastMessage(it)
+                inputErrors = getInputErrors(it)
+            }
+            errorStatus = getErrorStatus(throwable.response.status.value)
+            errorCode = throwable.response.status.value
+        }
 
-    return ApiError(message, errorCode, ApiError.ErrorStatus.TIMEOUT, toast, inputErrors)
-//    when (throwable) {
-//        is HttpException -> {
-//            val errorJson = getErrorBody(throwable.response())
-//            errorJson?.let {
-//                toast = getToastMessage(it)
-//                inputErrors = getInputErrors(it)
-//            }
-//            errorStatus = getErrorStatus(throwable.code())
-//            errorCode = throwable.code()
-//        }
-//        is SocketTimeoutException -> {
-//            errorStatus = ApiError.ErrorStatus.TIMEOUT
-//        }
-//        is IOException -> {
-//            errorStatus = ApiError.ErrorStatus.NO_CONNECTION
-//        }
-//        else -> {
-//            errorStatus = ApiError.ErrorStatus.UNKNOWN_ERROR
-//        }
-//    }
-//    return ApiError(message, errorCode, errorStatus, toast, inputErrors)
+        is ClientFailedException -> {
+            val errorJson = getErrorBody(throwable.cachedResponseText)
+            errorJson?.let {
+                toast = getToastMessage(it)
+                inputErrors = getInputErrors(it)
+            }
+            errorStatus = getErrorStatus(throwable.response.status.value)
+            errorCode = throwable.response.status.value
+        }
+
+        is HttpRequestTimeoutException -> {
+            errorStatus = ApiError.ErrorStatus.TIMEOUT
+        }
+
+        is IOException -> {
+            errorStatus = ApiError.ErrorStatus.NO_CONNECTION
+        }
+
+        else -> {
+            errorStatus = ApiError.ErrorStatus.UNKNOWN_ERROR
+        }
+    }
+    return ApiError(message, errorCode, errorStatus, toast, inputErrors)
 }
 
 private fun getErrorStatus(code: Int): ApiError.ErrorStatus {
@@ -53,49 +75,58 @@ private fun getErrorStatus(code: Int): ApiError.ErrorStatus {
     }
 }
 
-//private fun getErrorBody(response: Response<*>?): JSONObject? {
-//    try {
-//        val responseStr = response?.errorBody()?.string() ?: return null
-//        return JSONObject(responseStr)
-//    } catch (e: JSONException) {
-//        return null
-//    }
-//}
-//
-//private fun getToastMessage(errorJson: JSONObject): ApiError.Toast? {
-//    if (errorJson.has("toast")) {
-//        val toast = errorJson.getJSONObject("toast")
-//        return ApiError.Toast(
-//            toast.getString("message").localized()!!,
-//            when (toast.getString("toast_class").lowercase()) {
-//                "success" -> ApiError.ToastType.SUCCESS
-//                "danger" -> ApiError.ToastType.DANGER
-//                "warning" -> ApiError.ToastType.WARNING
-//                else -> ApiError.ToastType.DEFAULT
-//            }
-//        )
-//    }
-//    return null
-//}
-//
-//private fun getInputErrors(errorJson: JSONObject): Map<String, String>? {
-//    val errors = mutableMapOf<String, String>()
-//    if (errorJson.has("errors")) {
-//        val jsonErrors: JSONObject = errorJson.getJSONObject("errors")
-//        val keys = jsonErrors.keys()
-//        while (keys.hasNext()) {
-//            val key = keys.next()
-//            if (jsonErrors[key] is JSONArray) {
-//                var error: String? = null
-//                for (i in 0 until jsonErrors.getJSONArray(key).length()) {
-//                    error = jsonErrors.getJSONArray(key).getString(i)
-//                    break
-//                }
-//                if (error != null) {
-//                    errors[key] = error
-//                }
-//            }
-//        }
-//    }
-//    return if (errors.isNotEmpty()) errors else null
-//}
+@OptIn(InternalAPI::class)
+private fun getErrorBody(response: String): JsonObject? {
+    return try {
+        Json.parseToJsonElement(response).jsonObject
+    } catch (_: Exception) {
+        null
+    }
+}
+
+private fun getToastMessage(errorJson: JsonObject): ApiError.Toast? {
+    if (errorJson.contains("toast")) {
+        val toast = errorJson["toast"]!!
+        return ApiError.Toast(
+            toast.jsonObject["message"]!!.jsonPrimitive.content.toPersianDigits(),
+            when (toast.jsonObject["toast_class"]!!.jsonPrimitive.content.lowercase()) {
+                "success" -> ApiError.ToastType.SUCCESS
+                "danger" -> ApiError.ToastType.DANGER
+                "warning" -> ApiError.ToastType.WARNING
+                else -> ApiError.ToastType.DEFAULT
+            }
+        )
+    }
+    return null
+}
+
+private fun getInputErrors(errorJson: JsonObject): Map<String, String>? {
+    val errors = mutableMapOf<String, String>()
+    if (errorJson.contains("errors")) {
+        val jsonErrors: JsonObject = errorJson["errors"]!!.jsonObject
+        val keys = jsonErrors.keys
+        keys.forEach { key ->
+            if (jsonErrors[key] is JsonArray) {
+                var error: String? = null
+                for (i in 0 until jsonErrors[key]!!.jsonArray.size) {
+                    error = jsonErrors[key]!!.jsonArray[i].jsonPrimitive.content.toPersianDigits()
+                    break
+                }
+                if (error != null) {
+                    errors[key] = error
+                }
+            }
+        }
+    }
+    return if (errors.isNotEmpty()) errors else null
+}
+
+fun String.toPersianDigits(): String {
+    val englishDigits = "0123456789"
+    val persianDigits = "۰۱۲۳۴۵۶۷۸۹"
+
+    return this.map { char ->
+        val index = englishDigits.indexOf(char)
+        if (index != -1) persianDigits[index] else char
+    }.joinToString("")
+}
