@@ -21,7 +21,7 @@ import ir.niv.app.ui.core.isLoading
 import ir.niv.app.ui.core.onRetrieve
 import ir.niv.app.ui.login.graph.LoginRoute
 import ir.niv.app.ui.utils.LocalNavController
-import niv.design.designsystem.theme.NivTheme
+import ir.niv.app.ui.theme.theme.NivTheme
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.logo
 import nivapp.composeapp.generated.resources.splash_app_info

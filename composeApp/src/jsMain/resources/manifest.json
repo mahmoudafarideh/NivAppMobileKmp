@@ -1,0 +1,46 @@
+{
+  "name": "NivApp",
+  "dir": "rtl",
+  "lang": "fa",
+  "short_name": "NivApp",
+  "description": "نیواَپ",
+  "display": "standalone",
+  "theme_color": "#e6202e",
+  "background_color": "#fff",
+  "orientation": "portrait",
+  "prefer_related_applications": false,
+  "related_applications": [],
+  "start_url": "/statics/test/index.html",
+  "icons": [
+    {
+      "src": "https://nivapp.ir/static/user/v1/assets/img/icons/36x36.png",
+      "sizes": "36x36",
+      "type": "image/png"
+    },
+    {
+      "src": "https://nivapp.ir/static/user/v1/assets/img/icons/48x48.png",
+      "sizes": "48x48",
+      "type": "image/png"
+    },
+    {
+      "src": "https://nivapp.ir/static/user/v1/assets/img/icons/72x72.png",
+      "sizes": "72x72",
+      "type": "image/png"
+    },
+    {
+      "src": "https://nivapp.ir/static/user/v1/assets/img/icons/96x96.png",
+      "sizes": "96x96",
+      "type": "image/png"
+    },
+    {
+      "src": "https://nivapp.ir/static/user/v1/assets/img/icons/144x144.png",
+      "sizes": "144x144",
+      "type": "image/png"
+    },
+    {
+      "src": "https://nivapp.ir/static/user/v1/assets/img/icons/512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

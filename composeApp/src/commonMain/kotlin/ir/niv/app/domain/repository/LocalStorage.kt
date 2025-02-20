@@ -1,3 +1,5 @@
+@file:Suppress("UNCHECKED_CAST")
+
 package ir.niv.app.domain.repository
 
 import com.russhwolf.settings.Settings

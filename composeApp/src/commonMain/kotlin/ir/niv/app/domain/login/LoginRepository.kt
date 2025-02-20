@@ -6,7 +6,7 @@ import ir.niv.app.data.login.NumberRegisterDto
 class LoginRepository(
     private val loginApi: LoginApi
 ) {
-    suspend fun checkNumberRegistration(phoneNumber: String) {
+    suspend fun checkNumberRegistration(phoneNumber: String): PhoneNumberRegistrationState {
         return loginApi.registerNumber(phoneNumber).state.let {
             when (it) {
                 NumberRegisterDto.StateDto.Login -> PhoneNumberRegistrationState.Registered

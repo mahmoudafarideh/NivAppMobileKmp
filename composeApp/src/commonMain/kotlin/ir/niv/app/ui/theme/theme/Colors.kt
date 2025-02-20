@@ -1,4 +1,4 @@
-package niv.design.designsystem.theme
+package ir.niv.app.ui.theme.theme
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.ui.graphics.Color

@@ -19,7 +19,7 @@ import ir.niv.app.ui.splash.graph.SplashRoute
 import ir.niv.app.ui.splash.graph.splashNavGraph
 import ir.niv.app.ui.utils.LocalNavController
 import ir.niv.app.ui.utils.LocalSnackBarHostState
-import niv.design.designsystem.theme.NivTheme
+import ir.niv.app.ui.theme.theme.NivTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
 

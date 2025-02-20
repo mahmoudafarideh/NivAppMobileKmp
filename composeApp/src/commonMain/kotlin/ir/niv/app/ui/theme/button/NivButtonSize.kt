@@ -1,9 +1,9 @@
-package niv.design.designsystem.button
+package ir.niv.app.ui.theme.button
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import niv.design.designsystem.theme.NivTheme
+import ir.niv.app.ui.theme.theme.NivTheme
 
 enum class NivButtonSize(
     val height: Dp,

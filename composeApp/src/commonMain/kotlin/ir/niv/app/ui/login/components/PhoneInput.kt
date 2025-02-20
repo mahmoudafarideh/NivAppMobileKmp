@@ -1,8 +1,10 @@
 package ir.niv.app.ui.login.components
 
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
@@ -15,13 +17,15 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.LayoutDirection
-import niv.design.designsystem.theme.NivTheme
+import ir.niv.app.ui.theme.theme.NivTheme
 
 @Composable
 fun PhoneInput(
     number: String,
     error: String?,
+    readOnly: Boolean,
     onNumberChange: (String) -> Unit,
+    onEditClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     OutlinedTextField(
@@ -39,6 +43,15 @@ fun PhoneInput(
                 )
             }
         },
+        leadingIcon = {
+            AnimatedVisibility(readOnly) {
+                Icon(
+                    imageVector = Icons.Outlined.Edit,
+                    contentDescription = null,
+                    modifier = Modifier.clickable(onClick = onEditClick)
+                )
+            }
+        },
         shape = NivTheme.shapes.extraLarge,
         keyboardOptions = KeyboardOptions.Default.copy(
             keyboardType = KeyboardType.Phone
@@ -53,7 +66,8 @@ fun PhoneInput(
             ) {
                 Text(text = error.orEmpty())
             }
-        }
+        },
+        readOnly = readOnly
 
     )
 }

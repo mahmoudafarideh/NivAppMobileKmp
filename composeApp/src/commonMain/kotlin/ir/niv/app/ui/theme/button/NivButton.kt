@@ -1,4 +1,4 @@
-package niv.design.designsystem.button
+package ir.niv.app.ui.theme.button
 
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.foundation.layout.Box
@@ -15,7 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import niv.design.designsystem.theme.NivTheme
+import ir.niv.app.ui.theme.theme.NivTheme
 import org.jetbrains.compose.resources.DrawableResource
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview

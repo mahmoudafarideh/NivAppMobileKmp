@@ -1,4 +1,4 @@
-package niv.design.designsystem.button
+package ir.niv.app.ui.theme.button
 
 enum class NivButtonState {
     Loading,

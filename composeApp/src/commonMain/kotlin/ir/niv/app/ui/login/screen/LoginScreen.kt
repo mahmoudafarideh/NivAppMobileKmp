@@ -1,5 +1,6 @@
 package ir.niv.app.ui.login.screen
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -15,18 +16,16 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ir.niv.app.ui.core.FailedApi
-import ir.niv.app.ui.core.Retrieved
 import ir.niv.app.ui.login.components.PhoneInput
 import ir.niv.app.ui.utils.LocalSnackBarHostState
-import niv.design.designsystem.button.NivButton
-import niv.design.designsystem.button.NivButtonStyle
-import niv.design.designsystem.theme.NivTheme
+import ir.niv.app.ui.theme.button.NivButton
+import ir.niv.app.ui.theme.button.NivButtonStyle
+import ir.niv.app.ui.theme.theme.NivTheme
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.login_screen_title
 import nivapp.composeapp.generated.resources.logo
@@ -34,30 +33,16 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
+const val PhoneNumberInputKey = "phone_number"
+
 @Composable
 internal fun LoginScreen(
     modifier: Modifier = Modifier
 ) {
     val viewModel: LoginViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val phoneError by viewModel.apiErrors("phone_number").collectAsStateWithLifecycle(null)
-    val localSnackBar = LocalSnackBarHostState.current
-    LaunchedEffect(state.submitState) {
-        (state.submitState as? FailedApi)?.error?.message?.let {
-            localSnackBar.showSnackbar(
-                message = it.name,
-                withDismissAction = false,
-                duration = SnackbarDuration.Short
-            )
-        }
-        (state.submitState as? Retrieved)?.data?.let {
-            localSnackBar.showSnackbar(
-                message = "Gereft",
-                withDismissAction = false,
-                duration = SnackbarDuration.Short
-            )
-        }
-    }
+    val phoneError by viewModel.apiErrors(PhoneNumberInputKey).collectAsStateWithLifecycle()
+    ErrorMessageObserve(state)
     Scaffold(
         modifier = modifier,
         content = {
@@ -85,12 +70,36 @@ internal fun LoginScreen(
                             viewModel.phoneNumberChanged(it)
                         },
                         error = phoneError,
+                        readOnly = state.buttonUiModel != LoginUiModel.ButtonUiModel.RequestOtp,
                         modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                        onEditClick = {
+                            viewModel.editNumberClicked()
+                        }
                     )
-                    Spacer(modifier = Modifier.height(64.dp))
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    AnimatedVisibility(state.buttonUiModel != LoginUiModel.ButtonUiModel.RequestOtp) {
+                        PhoneInput(
+                            number = state.phoneNumber,
+                            onNumberChange = {
+                                viewModel.phoneNumberChanged(it)
+                            },
+                            error = phoneError,
+                            readOnly = state.buttonUiModel != LoginUiModel.ButtonUiModel.RequestOtp,
+                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                            onEditClick = {
+                                viewModel.editNumberClicked()
+                            }
+                        )
+                        Spacer(modifier = Modifier.height(64.dp))
+                    }
                 }
                 NivButton(
-                    label = "قبول شرایط و ادامه",
+                    label = when (state.buttonUiModel) {
+                        LoginUiModel.ButtonUiModel.Login -> "ورود به حساب کاربری"
+                        LoginUiModel.ButtonUiModel.Signup -> "ثبت نام"
+                        LoginUiModel.ButtonUiModel.RequestOtp -> "قبول شرایط و ادامه"
+                    },
                     onClick = {
                         viewModel.loginButtonClicked()
                     },
@@ -104,4 +113,18 @@ internal fun LoginScreen(
             }
         },
     )
+}
+
+@Composable
+private fun ErrorMessageObserve(state: LoginUiModel) {
+    val localSnackBar = LocalSnackBarHostState.current
+    LaunchedEffect(state.submitState) {
+        (state.submitState as? FailedApi)?.error?.message?.let {
+            localSnackBar.showSnackbar(
+                message = it.name,
+                withDismissAction = false,
+                duration = SnackbarDuration.Short
+            )
+        }
+    }
 }

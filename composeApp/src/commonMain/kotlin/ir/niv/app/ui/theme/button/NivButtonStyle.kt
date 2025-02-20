@@ -1,12 +1,12 @@
-package niv.design.designsystem.button
+package ir.niv.app.ui.theme.button
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
-import niv.design.designsystem.theme.NivTheme
-import niv.design.designsystem.theme.onSuccess
-import niv.design.designsystem.theme.onSuccessContainer
-import niv.design.designsystem.theme.success
-import niv.design.designsystem.theme.successContainer
+import ir.niv.app.ui.theme.theme.NivTheme
+import ir.niv.app.ui.theme.theme.onSuccess
+import ir.niv.app.ui.theme.theme.onSuccessContainer
+import ir.niv.app.ui.theme.theme.success
+import ir.niv.app.ui.theme.theme.successContainer
 
 enum class NivButtonStyle {
     Primary,

@@ -1,3 +1,4 @@
+import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
@@ -12,31 +13,20 @@ plugins {
 
 kotlin {
     androidTarget {
+        @OptIn(ExperimentalKotlinGradlePluginApi::class)
         compilerOptions {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-
-    js(IR) {
-        moduleName = "nivApp"
-        browser {
-            commonWebpackConfig {
-                outputFileName = "nivApp.js"
-            }
-        }
-        this.useCommonJs()
-        this.generateTypeScriptDefinitions()
-        binaries.executable()
-    }
-
+    
     @OptIn(ExperimentalWasmDsl::class)
     wasmJs {
-        moduleName = "nivApp"
+        moduleName = "composeApp"
         browser {
             val rootDirPath = project.rootDir.path
             val projectDirPath = project.projectDir.path
             commonWebpackConfig {
-                outputFileName = "nivApp.js"
+                outputFileName = "composeApp.js"
                 devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
                     static = (static ?: mutableListOf()).apply {
                         // Serve sources to debug inside browser
@@ -45,15 +35,28 @@ kotlin {
                     }
                 }
             }
-            testTask {
-                useKarma {
-                    useChromeHeadless()
-                    useFirefox()
-                    useSafari()
+        }
+        binaries.executable()
+    }
+
+    js(IR) {
+        moduleName = "composeApp"
+        browser {
+            val rootDirPath = project.rootDir.path
+            val projectDirPath = project.projectDir.path
+            commonWebpackConfig {
+                outputFileName = "composeApp.js"
+                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
+                    static = (static ?: mutableListOf()).apply {
+                        // Serve sources to debug inside browser
+                        add(rootDirPath)
+                        add(projectDirPath)
+                    }
                 }
             }
         }
         binaries.executable()
+        useEsModules()
     }
 
     sourceSets {
@@ -95,8 +98,6 @@ kotlin {
             implementation(libs.koin.core)
             implementation(libs.koin.compose)
             implementation(libs.koin.compose.vm)
-
-            implementation(project(":designsystem"))
 
             implementation(libs.ktor.client.core)
             implementation(libs.ktor.client.content.negotiation)

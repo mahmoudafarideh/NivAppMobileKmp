@@ -1,4 +1,4 @@
-package niv.design.designsystem.theme
+package ir.niv.app.ui.theme.theme
 
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
@@ -6,10 +6,10 @@ import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
-import nivapp.designsystem.generated.resources.Res
-import nivapp.designsystem.generated.resources.vazirmatn_bold
-import nivapp.designsystem.generated.resources.vazirmatn_medium
-import nivapp.designsystem.generated.resources.vazirmatn_regular
+import nivapp.composeapp.generated.resources.Res
+import nivapp.composeapp.generated.resources.vazirmatn_bold
+import nivapp.composeapp.generated.resources.vazirmatn_medium
+import nivapp.composeapp.generated.resources.vazirmatn_regular
 import org.jetbrains.compose.resources.Font
 
 @Composable

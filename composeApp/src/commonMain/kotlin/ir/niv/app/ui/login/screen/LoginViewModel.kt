@@ -1,7 +1,9 @@
 package ir.niv.app.ui.login.screen
 
 import ir.niv.app.domain.login.LoginRepository
+import ir.niv.app.domain.login.PhoneNumberRegistrationState
 import ir.niv.app.ui.core.BaseViewModel
+import ir.niv.app.ui.core.onRetrieve
 
 class LoginViewModel(
     private val loginRepository: LoginRepository
@@ -24,8 +26,16 @@ class LoginViewModel(
                 loginRepository.checkNumberRegistration(phoneNumber)
             },
             data = {
-                updateState {
-                    copy(submitState = it)
+                updateState { copy(submitState = it) }
+                it.onRetrieve { it ->
+                    updateState {
+                        copy(
+                            buttonUiModel = when (it) {
+                                PhoneNumberRegistrationState.Registered -> LoginUiModel.ButtonUiModel.Login
+                                PhoneNumberRegistrationState.Unregistered -> LoginUiModel.ButtonUiModel.Signup
+                            }
+                        )
+                    }
                 }
             }
         )
@@ -33,5 +43,11 @@ class LoginViewModel(
 
     private fun getValidNumber(number: String): String = number
         .filter { it.isDigit() }.take(11)
+
+    fun editNumberClicked() {
+        updateState {
+            copy(buttonUiModel = LoginUiModel.ButtonUiModel.RequestOtp)
+        }
+    }
 
 }
