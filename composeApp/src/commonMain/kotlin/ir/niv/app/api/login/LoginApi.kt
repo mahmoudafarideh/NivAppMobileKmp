@@ -3,14 +3,17 @@ package ir.niv.app.api.login
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.request.forms.submitForm
+import io.ktor.client.request.post
 import io.ktor.http.parameters
+import ir.niv.app.api.core.CheckLoginDto
 import ir.niv.app.di.ApiV1
 import ir.niv.app.domain.core.PhoneNumber
 import ir.niv.app.domain.login.Otp
 
 private const val RegisterNumberUrl = ApiV1 + "signup/"
 private const val LoginOtpUrl = ApiV1 + "login/otp/"
-private const val client_id = "6065UmUbHtXoNLbSAmouTDH6oelPaL7itKM8Js6T"
+private const val CheckLoginUrl = ApiV1 + "checklogin/"
+const val client_id = "6065UmUbHtXoNLbSAmouTDH6oelPaL7itKM8Js6T"
 
 class LoginApi(private val client: HttpClient) {
 
@@ -27,9 +30,12 @@ class LoginApi(private val client: HttpClient) {
             url = LoginOtpUrl,
             formParameters = parameters {
                 append("phone_number", phoneNumber.phone)
+                append("phone", phoneNumber.phone)
                 append("generated_code", otpCode.code)
                 append("client_id", client_id)
                 append("grant_type", "otp")
             }
         ).body()
+
+    suspend fun checkLogin(): CheckLoginDto = client.post(urlString = CheckLoginUrl).body()
 }

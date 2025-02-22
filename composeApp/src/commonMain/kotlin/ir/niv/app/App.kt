@@ -14,12 +14,13 @@ import androidx.compose.ui.unit.dp
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.rememberNavController
 import ir.niv.app.di.koinModules
+import ir.niv.app.ui.home.graph.homeGraph
 import ir.niv.app.ui.login.graph.loginGraph
 import ir.niv.app.ui.splash.graph.SplashRoute
 import ir.niv.app.ui.splash.graph.splashNavGraph
+import ir.niv.app.ui.theme.theme.NivTheme
 import ir.niv.app.ui.utils.LocalNavController
 import ir.niv.app.ui.utils.LocalSnackBarHostState
-import ir.niv.app.ui.theme.theme.NivTheme
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
 
@@ -52,6 +53,7 @@ fun App() {
                 ) {
                     splashNavGraph()
                     loginGraph()
+                    homeGraph()
                 }
                 SnackbarHost(
                     hostState = snackbarHostState,

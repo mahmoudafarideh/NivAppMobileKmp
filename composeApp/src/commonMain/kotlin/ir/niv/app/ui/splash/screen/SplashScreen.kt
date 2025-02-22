@@ -19,9 +19,10 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ir.niv.app.ui.core.isLoading
 import ir.niv.app.ui.core.onRetrieve
+import ir.niv.app.ui.home.graph.HomeRoute
 import ir.niv.app.ui.login.graph.LoginRoute
-import ir.niv.app.ui.utils.LocalNavController
 import ir.niv.app.ui.theme.theme.NivTheme
+import ir.niv.app.ui.utils.LocalNavController
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.logo
 import nivapp.composeapp.generated.resources.splash_app_info
@@ -36,8 +37,11 @@ fun SplashScreen(modifier: Modifier = Modifier) {
         val state = viewModel.state.collectAsStateWithLifecycle().value
         val navController = LocalNavController.current
         LaunchedEffect(state) {
-            state.onRetrieve {
-                if(!it) {
+            state.onRetrieve { isLoggedIn ->
+                if (isLoggedIn) {
+                    navController.popBackStack()
+                    navController.navigate(HomeRoute)
+                } else {
                     navController.popBackStack()
                     navController.navigate(LoginRoute)
                 }
@@ -68,11 +72,15 @@ fun SplashScreen(modifier: Modifier = Modifier) {
 
             }
 
-            Text(
-                modifier = Modifier.align(Alignment.BottomCenter).padding(bottom = 32.dp),
-                text = stringResource(Res.string.splash_app_info),
-                style = NivTheme.typography.bodyMedium
-            )
+            Column(
+                modifier = Modifier.align(Alignment.BottomCenter)
+            ) {
+                Text(
+                    modifier = Modifier.padding(bottom = 32.dp),
+                    text = stringResource(Res.string.splash_app_info),
+                    style = NivTheme.typography.bodyMedium
+                )
+            }
         }
     }
 }

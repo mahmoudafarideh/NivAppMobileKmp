@@ -7,4 +7,4 @@ fun initKoin(appDeclaration: KoinAppDeclaration = {}) = org.koin.core.context.st
     modules(koinModules)
 }
 
-val koinModules = listOf(viewModels, domainModules, dataModules, networkModules)
+val koinModules = listOf(viewModels, domainModules, dataModules, networkModules, apiModules)

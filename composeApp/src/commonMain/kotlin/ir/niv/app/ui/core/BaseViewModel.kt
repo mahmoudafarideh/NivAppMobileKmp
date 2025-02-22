@@ -4,11 +4,13 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import ir.niv.app.ui.utils.traceErrorException
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
@@ -63,6 +65,21 @@ open class BaseViewModel<T>(
                     _toastUiStateFlow.tryEmit(it.toUiModel())
                 }
                 data(FailedApi(apiError))
+            }
+        }
+    }
+
+    protected suspend fun <T> getDeferredDataFlow(
+        action: suspend () -> T,
+    ): Flow<DeferredData<T>> {
+        return flow {
+            runCatching {
+                action()
+            }.onSuccess {
+                emit(Retrieved(it))
+            }.onFailure {
+                val apiError = traceErrorException(it)
+                emit(FailedApi(apiError))
             }
         }
     }

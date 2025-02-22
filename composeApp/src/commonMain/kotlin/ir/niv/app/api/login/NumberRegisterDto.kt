@@ -6,7 +6,9 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class NumberRegisterDto(
     @SerialName("response")
-    val state: StateDto
+    val state: StateDto,
+    @SerialName("timeout")
+    val timeout: Long = 120_000
 ) {
     @Serializable
     enum class StateDto {

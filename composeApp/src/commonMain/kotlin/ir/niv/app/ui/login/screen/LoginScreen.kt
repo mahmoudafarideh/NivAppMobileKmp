@@ -21,12 +21,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ir.niv.app.ui.core.FailedApi
+import ir.niv.app.ui.home.graph.HomeRoute
 import ir.niv.app.ui.login.components.OtpInput
 import ir.niv.app.ui.login.components.PhoneInput
-import ir.niv.app.ui.utils.LocalSnackBarHostState
 import ir.niv.app.ui.theme.button.NivButton
 import ir.niv.app.ui.theme.button.NivButtonStyle
 import ir.niv.app.ui.theme.theme.NivTheme
+import ir.niv.app.ui.utils.LocalNavController
+import ir.niv.app.ui.utils.LocalSnackBarHostState
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.login_screen_title
 import nivapp.composeapp.generated.resources.logo
@@ -35,6 +37,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 const val PhoneNumberInputKey = "phone_number"
+const val OtpInputKey = "generated_code"
 
 @Composable
 internal fun LoginScreen(
@@ -43,11 +46,18 @@ internal fun LoginScreen(
     val viewModel: LoginViewModel = koinViewModel()
     val state by viewModel.state.collectAsStateWithLifecycle()
     val phoneError by viewModel.apiErrors(PhoneNumberInputKey).collectAsStateWithLifecycle()
+    val otpError by viewModel.apiErrors(OtpInputKey).collectAsStateWithLifecycle()
+    val navController = LocalNavController.current
     ErrorMessageObserve(state)
+    LaunchedEffect(Unit) {
+        viewModel.navigateToHome.collect {
+            navController.navigate(HomeRoute)
+        }
+    }
     Scaffold(
         modifier = modifier,
-        content = {
-            Box(modifier = Modifier.fillMaxSize().padding(it)) {
+        content = { padding ->
+            Box(modifier = Modifier.fillMaxSize().padding(padding)) {
                 Column(
                     horizontalAlignment = Alignment.CenterHorizontally,
                     modifier = Modifier.align(Alignment.Center)
@@ -86,7 +96,7 @@ internal fun LoginScreen(
                                 onOtpChange = {
                                     viewModel.otpChanged(it)
                                 },
-                                error = phoneError,
+                                error = otpError,
                                 modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
                             )
                             Spacer(modifier = Modifier.height(64.dp))

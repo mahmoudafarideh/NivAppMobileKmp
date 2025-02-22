@@ -35,7 +35,7 @@ class LocalStorageImp(
                 settings.getLong(key, (defaultValue ?: 0) as Long) as T
 
             String::class ->
-                settings.getString(key, defaultValue as String) as T?
+                settings.getString(key, (defaultValue as? String).orEmpty()) as T?
 
             Boolean::class ->
                 settings.getBoolean(key, (defaultValue ?: false) as Boolean) as T
