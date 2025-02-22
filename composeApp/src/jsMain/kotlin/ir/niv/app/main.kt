@@ -16,11 +16,7 @@ import org.jetbrains.skiko.wasm.onWasmReady
 fun main() {
     onWasmReady {
         ComposeViewport(document.body!!) {
-            CompositionLocalProvider(
-                LocalDensity provides Density(1.0f),
-            ) {
-                AppWithDI()
-            }
+            AppWithDI()
         }
     }
 

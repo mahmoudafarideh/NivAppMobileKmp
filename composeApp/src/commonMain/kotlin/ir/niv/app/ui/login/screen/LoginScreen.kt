@@ -21,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ir.niv.app.ui.core.FailedApi
+import ir.niv.app.ui.login.components.OtpInput
 import ir.niv.app.ui.login.components.PhoneInput
 import ir.niv.app.ui.utils.LocalSnackBarHostState
 import ir.niv.app.ui.theme.button.NivButton
@@ -79,19 +80,17 @@ internal fun LoginScreen(
                     Spacer(modifier = Modifier.height(24.dp))
 
                     AnimatedVisibility(state.buttonUiModel != LoginUiModel.ButtonUiModel.RequestOtp) {
-                        PhoneInput(
-                            number = state.phoneNumber,
-                            onNumberChange = {
-                                viewModel.phoneNumberChanged(it)
-                            },
-                            error = phoneError,
-                            readOnly = state.buttonUiModel != LoginUiModel.ButtonUiModel.RequestOtp,
-                            modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
-                            onEditClick = {
-                                viewModel.editNumberClicked()
-                            }
-                        )
-                        Spacer(modifier = Modifier.height(64.dp))
+                        Column {
+                            OtpInput(
+                                otp = state.otp,
+                                onOtpChange = {
+                                    viewModel.otpChanged(it)
+                                },
+                                error = phoneError,
+                                modifier = Modifier.fillMaxWidth().padding(horizontal = 16.dp),
+                            )
+                            Spacer(modifier = Modifier.height(64.dp))
+                        }
                     }
                 }
                 NivButton(

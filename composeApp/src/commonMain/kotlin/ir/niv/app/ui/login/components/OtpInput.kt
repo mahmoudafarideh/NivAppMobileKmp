@@ -5,6 +5,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Edit
+import androidx.compose.material.icons.outlined.Numbers
 import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
@@ -20,49 +21,30 @@ import androidx.compose.ui.unit.LayoutDirection
 import ir.niv.app.ui.theme.theme.NivTheme
 
 @Composable
-fun PhoneInput(
-    number: String,
+fun OtpInput(
+    otp: String,
     error: String?,
-    readOnly: Boolean,
-    onNumberChange: (String) -> Unit,
-    onEditClick: () -> Unit,
+    onOtpChange: (String) -> Unit,
     modifier: Modifier = Modifier,
 ) {
-    val leading: @Composable (() -> Unit)? = when {
-        readOnly -> {
-            {
-                AnimatedVisibility(readOnly) {
-                    Icon(
-                        imageVector = Icons.Outlined.Edit,
-                        contentDescription = null,
-                        modifier = Modifier.clickable(onClick = onEditClick)
-                    )
-                }
-            }
-        }
-        else -> {
-            null
-        }
-    }
     OutlinedTextField(
-        value = number,
-        onValueChange = onNumberChange,
+        value = otp,
+        onValueChange = onOtpChange,
         modifier = modifier,
         placeholder = {
-            Text(text = "شماره موبایل")
+            Text(text = "کد ورود")
         },
         trailingIcon = {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {
                 Icon(
-                    imageVector = Icons.Outlined.Phone,
+                    imageVector = Icons.Outlined.Numbers,
                     contentDescription = null,
                 )
             }
         },
-        leadingIcon = leading,
         shape = NivTheme.shapes.extraLarge,
         keyboardOptions = KeyboardOptions.Default.copy(
-            keyboardType = KeyboardType.Phone
+            keyboardType = KeyboardType.Number
         ),
         textStyle = LocalTextStyle.current.copy(
             textDirection = TextDirection.Ltr
@@ -74,8 +56,7 @@ fun PhoneInput(
             ) {
                 Text(text = error.orEmpty())
             }
-        },
-        readOnly = readOnly
+        }
 
     )
 }

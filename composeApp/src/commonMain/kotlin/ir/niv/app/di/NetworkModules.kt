@@ -69,15 +69,15 @@ val networkModules = module {
                     }
                 }
             }
-            install(HttpCallValidator) {
-                validateResponse { response ->
-                    val responseBody = response.bodyAsText()
-                    val json = Json.parseToJsonElement(responseBody).jsonObject
-                    if (json.contains("ok") && !json.jsonObject["ok"]!!.jsonPrimitive.boolean) {
-                        throw ClientFailedException(response, responseBody)
-                    }
-                }
-            }
+//            install(HttpCallValidator) {
+//                validateResponse { response ->
+//                    val responseBody = response.bodyAsText()
+//                    val json = Json.parseToJsonElement(responseBody).jsonObject
+//                    if (json.contains("ok") && !json.jsonObject["ok"]!!.jsonPrimitive.boolean) {
+//                        throw ClientFailedException(response, responseBody)
+//                    }
+//                }
+//            }
         }
     }
     single { LoginApi(get()) }

@@ -8,14 +8,24 @@ import ir.niv.app.ui.theme.button.NivButtonState
 
 data class LoginUiModel(
     val phoneNumber: String = "",
+    val otp: String = "",
     val submitState: DeferredData<PhoneNumberRegistrationState> = ReadyToFetch,
     val buttonUiModel: ButtonUiModel = ButtonUiModel.RequestOtp
 ) {
     val numberValid = phoneNumber.length == 11
-    val buttonState = when {
-        !numberValid -> NivButtonState.Disable
-        submitState.isLoading -> NivButtonState.Loading
-        else -> NivButtonState.Enable
+    val otpValid = otp.length == 6
+
+    val buttonState = when(buttonUiModel) {
+        ButtonUiModel.RequestOtp -> when {
+            !numberValid -> NivButtonState.Disable
+            submitState.isLoading -> NivButtonState.Loading
+            else -> NivButtonState.Enable
+        }
+        else -> when {
+            !otpValid -> NivButtonState.Disable
+            submitState.isLoading -> NivButtonState.Loading
+            else -> NivButtonState.Enable
+        }
     }
 
     enum class ButtonUiModel {
