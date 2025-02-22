@@ -3,6 +3,9 @@ enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 pluginManagement {
     repositories {
+        maven {
+            url = uri("https://maven.myket.ir")
+        }
         google {
             mavenContent {
                 includeGroupAndSubgroups("androidx")
@@ -17,6 +20,9 @@ pluginManagement {
 
 dependencyResolutionManagement {
     repositories {
+        maven {
+            url = uri("https://maven.myket.ir")
+        }
         google {
             mavenContent {
                 includeGroupAndSubgroups("androidx")

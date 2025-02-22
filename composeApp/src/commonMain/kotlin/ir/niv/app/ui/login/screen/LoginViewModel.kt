@@ -26,9 +26,12 @@ class LoginViewModel(
         val phoneNumber = state.value.phoneNumber.takeIf {
             state.value.numberValid
         } ?: return
-        if(state.value.buttonUiModel == ButtonUiModel.RequestOtp) {
+        if (state.value.buttonUiModel == ButtonUiModel.RequestOtp) {
             otpRequest(phoneNumber)
         } else {
+            val otpCode = state.value.otp.takeIf {
+                state.value.otpValid
+            } ?: return
 
         }
     }

@@ -8,6 +8,6 @@ import org.koin.core.module.Module
 
 actual fun Module.storageModule(): KoinDefinition<LocalStorage> {
     return single {
-        LocalStorageImp(StorageSettings())
+        LocalStorageImp(StorageSettings(), get())
     }
 }

@@ -3,7 +3,6 @@ package ir.niv.app.di
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.DefaultRequest
-import io.ktor.client.plugins.HttpCallValidator
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
@@ -16,15 +15,9 @@ import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.request.header
 import io.ktor.client.request.post
 import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
 import io.ktor.serialization.kotlinx.json.json
-import ir.niv.app.data.login.LoginApi
+import ir.niv.app.api.login.LoginApi
 import ir.niv.app.domain.repository.AuthRepository
-import ir.niv.app.ui.utils.ClientFailedException
-import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.boolean
-import kotlinx.serialization.json.jsonObject
-import kotlinx.serialization.json.jsonPrimitive
 import org.koin.dsl.module
 
 const val BaseUrl = "https://nivapp.ir/user/api/"
@@ -35,12 +28,7 @@ val networkModules = module {
         val authRepository: AuthRepository = get()
         HttpClient {
             install(ContentNegotiation) {
-                json(
-                    Json {
-                        ignoreUnknownKeys = true
-                        isLenient = true
-                    }
-                )
+                json(get())
             }
             install(DefaultRequest) {
                 url(BaseUrl)

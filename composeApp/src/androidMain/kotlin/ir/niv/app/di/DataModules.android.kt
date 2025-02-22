@@ -11,6 +11,7 @@ actual fun Module.storageModule(): KoinDefinition<LocalStorage> = single {
     LocalStorageImp(
         SharedPreferencesSettings
             .Factory(androidContext())
-            .create(null)
+            .create(null),
+        get()
     )
 }
