@@ -2,5 +2,11 @@
 <resources>
     <string name="app_name">نیواپ</string>
     <string name="login_screen_title">ورود به حساب کاربری</string>
+    <string name="login_button_register">قبول شرایط و ادامه</string>
+    <string name="login_button_signup">ثبت نام</string>
+    <string name="login_button_enter">ورود به حساب کاربری</string>
+    <string name="login_phone_input">شماره موبایل</string>
+    <string name="login_otp_input">کد ورود</string>
+    <string name="retry">تلاش دوباره</string>
     <string name="splash_app_info">نیواپ | v1.0.0</string>
 </resources>

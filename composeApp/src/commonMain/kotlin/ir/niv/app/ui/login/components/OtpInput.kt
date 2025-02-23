@@ -1,12 +1,9 @@
 package ir.niv.app.ui.login.components
 
 import androidx.compose.animation.AnimatedVisibility
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material.icons.outlined.Numbers
-import androidx.compose.material.icons.outlined.Phone
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalTextStyle
 import androidx.compose.material3.OutlinedTextField
@@ -19,6 +16,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.LayoutDirection
 import ir.niv.app.ui.theme.theme.NivTheme
+import nivapp.composeapp.generated.resources.Res
+import nivapp.composeapp.generated.resources.login_otp_input
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun OtpInput(
@@ -32,7 +32,7 @@ fun OtpInput(
         onValueChange = onOtpChange,
         modifier = modifier,
         placeholder = {
-            Text(text = "کد ورود")
+            Text(text = stringResource(Res.string.login_otp_input))
         },
         trailingIcon = {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {

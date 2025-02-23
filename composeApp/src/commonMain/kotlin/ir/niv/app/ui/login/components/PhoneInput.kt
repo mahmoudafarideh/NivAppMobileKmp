@@ -18,6 +18,9 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDirection
 import androidx.compose.ui.unit.LayoutDirection
 import ir.niv.app.ui.theme.theme.NivTheme
+import nivapp.composeapp.generated.resources.Res
+import nivapp.composeapp.generated.resources.login_phone_input
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun PhoneInput(
@@ -49,7 +52,7 @@ fun PhoneInput(
         onValueChange = onNumberChange,
         modifier = modifier,
         placeholder = {
-            Text(text = "شماره موبایل")
+            Text(text = stringResource(Res.string.login_phone_input))
         },
         trailingIcon = {
             CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Ltr) {

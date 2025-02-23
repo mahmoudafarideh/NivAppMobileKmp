@@ -76,8 +76,7 @@ val networkModules = module {
                         )
                     }
                     refreshTokens {
-                        val newAccessToken =
-                            refreshAccessToken(
+                        val newAccessToken = refreshAccessToken(
                                 this.client,
                                 authRepository.refreshToken.orEmpty(),
                                 userRepository.userFlow.value?.phone

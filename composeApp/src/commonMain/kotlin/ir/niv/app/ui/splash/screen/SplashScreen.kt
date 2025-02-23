@@ -17,14 +17,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import ir.niv.app.ui.core.isFailed
 import ir.niv.app.ui.core.isLoading
 import ir.niv.app.ui.core.onRetrieve
 import ir.niv.app.ui.home.graph.HomeRoute
 import ir.niv.app.ui.login.graph.LoginRoute
+import ir.niv.app.ui.theme.button.NivButton
 import ir.niv.app.ui.theme.theme.NivTheme
 import ir.niv.app.ui.utils.LocalNavController
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.logo
+import nivapp.composeapp.generated.resources.retry
 import nivapp.composeapp.generated.resources.splash_app_info
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -73,8 +76,22 @@ fun SplashScreen(modifier: Modifier = Modifier) {
             }
 
             Column(
-                modifier = Modifier.align(Alignment.BottomCenter)
+                modifier = Modifier.align(Alignment.BottomCenter).padding(horizontal = 16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                AnimatedVisibility(
+                    visible = state.isFailed
+                ) {
+                    Column {
+                        NivButton(
+                            label = stringResource(Res.string.retry),
+                            onClick = {
+                                viewModel.retryClicked()
+                            },
+                        )
+                        Spacer(modifier = Modifier.size(24.dp))
+                    }
+                }
                 Text(
                     modifier = Modifier.padding(bottom = 32.dp),
                     text = stringResource(Res.string.splash_app_info),

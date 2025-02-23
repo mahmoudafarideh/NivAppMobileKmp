@@ -30,6 +30,9 @@ import ir.niv.app.ui.theme.theme.NivTheme
 import ir.niv.app.ui.utils.LocalNavController
 import ir.niv.app.ui.utils.LocalSnackBarHostState
 import nivapp.composeapp.generated.resources.Res
+import nivapp.composeapp.generated.resources.login_button_enter
+import nivapp.composeapp.generated.resources.login_button_register
+import nivapp.composeapp.generated.resources.login_button_signup
 import nivapp.composeapp.generated.resources.login_screen_title
 import nivapp.composeapp.generated.resources.logo
 import org.jetbrains.compose.resources.painterResource
@@ -104,11 +107,13 @@ internal fun LoginScreen(
                     }
                 }
                 NivButton(
-                    label = when (state.buttonUiModel) {
-                        LoginUiModel.ButtonUiModel.Login -> "ورود به حساب کاربری"
-                        LoginUiModel.ButtonUiModel.Signup -> "ثبت نام"
-                        LoginUiModel.ButtonUiModel.RequestOtp -> "قبول شرایط و ادامه"
-                    },
+                    label = stringResource(
+                        when (state.buttonUiModel) {
+                            LoginUiModel.ButtonUiModel.Login -> Res.string.login_button_enter
+                            LoginUiModel.ButtonUiModel.Signup -> Res.string.login_button_signup
+                            LoginUiModel.ButtonUiModel.RequestOtp -> Res.string.login_button_register
+                        }
+                    ),
                     onClick = {
                         viewModel.loginButtonClicked()
                     },

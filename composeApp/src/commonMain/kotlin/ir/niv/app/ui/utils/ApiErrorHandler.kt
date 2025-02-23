@@ -3,7 +3,6 @@ package ir.niv.app.ui.utils
 import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.statement.bodyAsText
-import io.ktor.utils.io.InternalAPI
 import ir.niv.app.ui.core.ApiError
 import kotlinx.io.IOException
 import kotlinx.serialization.json.Json
@@ -75,7 +74,6 @@ private fun getErrorStatus(code: Int): ApiError.ErrorStatus {
     }
 }
 
-@OptIn(InternalAPI::class)
 private fun getErrorBody(response: String): JsonObject? {
     return try {
         Json.parseToJsonElement(response).jsonObject
@@ -118,7 +116,7 @@ private fun getInputErrors(errorJson: JsonObject): Map<String, String>? {
             }
         }
     }
-    return if (errors.isNotEmpty()) errors else null
+    return errors.ifEmpty { null }
 }
 
 fun String.toPersianDigits(): String {
