@@ -22,13 +22,15 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import ir.niv.app.ui.core.FailedApi
 import ir.niv.app.ui.home.graph.HomeRoute
+import ir.niv.app.ui.home.graph.routes.navigator
 import ir.niv.app.ui.login.components.OtpInput
 import ir.niv.app.ui.login.components.PhoneInput
 import ir.niv.app.ui.theme.button.NivButton
 import ir.niv.app.ui.theme.button.NivButtonStyle
 import ir.niv.app.ui.theme.theme.NivTheme
-import ir.niv.app.ui.utils.LocalNavController
 import ir.niv.app.ui.utils.LocalSnackBarHostState
+import m.a.compilot.navigation.controller.LocalNavController
+import m.a.compilot.navigation.controller.comPilotNavController
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.login_button_enter
 import nivapp.composeapp.generated.resources.login_button_register
@@ -50,11 +52,11 @@ internal fun LoginScreen(
     val state by viewModel.state.collectAsStateWithLifecycle()
     val phoneError by viewModel.apiErrors(PhoneNumberInputKey).collectAsStateWithLifecycle()
     val otpError by viewModel.apiErrors(OtpInputKey).collectAsStateWithLifecycle()
-    val navController = LocalNavController.current
+    val navController = LocalNavController.comPilotNavController
     ErrorMessageObserve(state)
     LaunchedEffect(Unit) {
         viewModel.navigateToHome.collect {
-            navController.navigate(HomeRoute)
+            navController.clearBackStack().navigate(HomeRoute.navigator)
         }
     }
     Scaffold(

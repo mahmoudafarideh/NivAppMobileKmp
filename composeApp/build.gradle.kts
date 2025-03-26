@@ -1,5 +1,5 @@
+import org.gradle.kotlin.dsl.project
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
-import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
 
@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
     alias(libs.plugins.kotlinx.serialization)
+    alias(libs.plugins.ksp)
 }
 
 kotlin {
@@ -40,6 +41,44 @@ kotlin {
     }
 
     sourceSets {
+        val commonMain by getting {
+            kotlin.srcDir("build/generated/ksp/commonMain/kotlin")
+            dependencies {
+                implementation(compose.runtime)
+                implementation(compose.foundation)
+                implementation(compose.material3)
+                implementation(compose.materialIconsExtended)
+                implementation(compose.ui)
+                implementation(compose.material3AdaptiveNavigationSuite)
+                implementation(compose.components.resources)
+                implementation(compose.components.uiToolingPreview)
+                implementation(libs.androidx.lifecycle.viewmodel)
+                implementation(libs.androidx.lifecycle.runtime.compose)
+                implementation(libs.navigation.compose)
+                implementation(libs.kotlinx.serialization.json)
+                implementation(libs.kstore)
+
+                implementation(libs.multiplatform.settings)
+                implementation(libs.multiplatform.settings.no.arg)
+
+                implementation(libs.koin.core)
+                implementation(libs.koin.compose)
+                implementation(libs.koin.compose.vm)
+
+                implementation(libs.ktor.client.core)
+                implementation(libs.ktor.client.content.negotiation)
+                implementation(libs.ktor.client.serialization)
+                implementation(libs.ktor.client.serialization.json)
+                implementation(libs.ktor.client.logging)
+                implementation(libs.ktor.client.auth)
+
+                implementation(libs.kotlinx.coroutines.core)
+
+                implementation(project(":compilot:common"))
+                implementation(project(":compilot:runtime"))
+                implementation(project(":compilot:navigation"))
+            }
+        }
         jsMain.dependencies {
             implementation(libs.kstore.storage)
         }
@@ -53,39 +92,6 @@ kotlin {
             implementation(libs.koin.android.compose)
 
             implementation(libs.ktor.client.android)
-        }
-        commonMain.dependencies {
-            implementation(compose.runtime)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.materialIconsExtended)
-            implementation(compose.ui)
-            implementation(compose.material3AdaptiveNavigationSuite)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(libs.androidx.lifecycle.viewmodel)
-            implementation(libs.androidx.lifecycle.runtime.compose)
-            implementation(libs.navigation.compose)
-            implementation(libs.kotlinx.serialization.json)
-            implementation(libs.kstore)
-
-            implementation(libs.multiplatform.settings)
-            implementation(libs.multiplatform.settings.no.arg)
-
-            implementation(libs.koin.core)
-            implementation(libs.koin.compose)
-            implementation(libs.koin.compose.vm)
-
-            implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.content.negotiation)
-            implementation(libs.ktor.client.serialization)
-            implementation(libs.ktor.client.serialization.json)
-            implementation(libs.ktor.client.logging)
-            implementation(libs.ktor.client.auth)
-
-            implementation(libs.kotlinx.coroutines.core)
-
-
         }
     }
 }
@@ -119,5 +125,15 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
+    add("kspCommonMainMetadata", project(":compilot:compiler"))
 }
 
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {
+    if (name != "kspCommonMainKotlinMetadata") {
+        dependsOn("kspCommonMainKotlinMetadata")
+    }
+}
+
+kotlin.sourceSets.commonMain {
+    kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
+}

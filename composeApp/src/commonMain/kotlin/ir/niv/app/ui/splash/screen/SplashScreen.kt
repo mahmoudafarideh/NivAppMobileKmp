@@ -21,10 +21,14 @@ import ir.niv.app.ui.core.isFailed
 import ir.niv.app.ui.core.isLoading
 import ir.niv.app.ui.core.onRetrieve
 import ir.niv.app.ui.home.graph.HomeRoute
+import ir.niv.app.ui.home.graph.routes.navigator
 import ir.niv.app.ui.login.graph.LoginRoute
+import ir.niv.app.ui.login.graph.routes.navigator
 import ir.niv.app.ui.theme.button.NivButton
 import ir.niv.app.ui.theme.theme.NivTheme
-import ir.niv.app.ui.utils.LocalNavController
+import ir.niv.app.ui.utils.logInfo
+import m.a.compilot.navigation.controller.LocalNavController
+import m.a.compilot.navigation.controller.comPilotNavController
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.logo
 import nivapp.composeapp.generated.resources.retry
@@ -38,15 +42,16 @@ fun SplashScreen(modifier: Modifier = Modifier) {
     Scaffold(modifier = modifier) {
         val viewModel: SplashViewModel = koinViewModel()
         val state = viewModel.state.collectAsStateWithLifecycle().value
-        val navController = LocalNavController.current
+        val navController = LocalNavController.comPilotNavController
         LaunchedEffect(state) {
             state.onRetrieve { isLoggedIn ->
+                navController.navController.currentBackStack.value.let {
+                    logInfo("SXO", it.map { it.destination.route })
+                }
                 if (isLoggedIn) {
-                    navController.popBackStack()
-                    navController.navigate(HomeRoute)
+                    navController.clearBackStack().navigate(HomeRoute.navigator)
                 } else {
-                    navController.popBackStack()
-                    navController.navigate(LoginRoute)
+                    navController.navigate(LoginRoute.navigator)
                 }
             }
         }

@@ -1,14 +1,8 @@
 package ir.niv.app
 
-import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.ui.ExperimentalComposeUiApi
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.platform.LocalFontFamilyResolver
-import androidx.compose.ui.platform.LocalLayoutDirection
-import androidx.compose.ui.text.font.createFontFamilyResolver
-import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.LayoutDirection
 import androidx.compose.ui.window.ComposeViewport
+import ir.niv.app.ui.home.graph.HomeRoute
 import kotlinx.browser.document
 import org.jetbrains.skiko.wasm.onWasmReady
 
@@ -19,6 +13,4 @@ fun main() {
             AppWithDI()
         }
     }
-
-
 }
