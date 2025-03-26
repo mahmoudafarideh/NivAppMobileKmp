@@ -83,12 +83,10 @@ private fun getErrorBody(response: String): JsonObject? {
 }
 
 private fun getToastMessage(errorJson: JsonObject): ApiError.Toast? {
-    logInfo("SXO", errorJson.toString())
     if (errorJson.contains("toast")) {
-        val toast = errorJson["toast"]!!
         return ApiError.Toast(
-            toast.jsonObject["toast_message"]!!.toString().toPersianDigits(),
-            when (toast.jsonObject["toast_type"]!!.toString().lowercase()) {
+            errorJson.jsonObject["toast_message"]!!.toString().toPersianDigits(),
+            when (errorJson.jsonObject["toast_type"]!!.toString().lowercase()) {
                 "success" -> ApiError.ToastType.SUCCESS
                 "danger" -> ApiError.ToastType.DANGER
                 "warning" -> ApiError.ToastType.WARNING

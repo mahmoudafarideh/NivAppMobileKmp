@@ -23,7 +23,6 @@ import io.ktor.serialization.kotlinx.json.json
 import ir.niv.app.api.login.LoginApi
 import ir.niv.app.api.login.LoginDto
 import ir.niv.app.api.login.client_id
-import ir.niv.app.domain.core.PhoneNumber
 import ir.niv.app.domain.core.UserRepository
 import ir.niv.app.domain.repository.AuthRepository
 import ir.niv.app.ui.core.ApiError
@@ -82,9 +81,7 @@ val networkModules = module {
                             refreshAccessToken(
                                 this.client,
                                 authRepository.refreshToken.orEmpty(),
-                                userRepository.userFlow.value?.phone
                             )
-
                         }.fold(
                             onSuccess = { newAccessToken ->
                                 authRepository.updateTokens(
@@ -97,7 +94,7 @@ val networkModules = module {
                             },
                             onFailure = {
                                 traceErrorException(it).let {
-                                    when(it.errorStatus) {
+                                    when (it.errorStatus) {
                                         ApiError.ErrorStatus.BAD_REQUEST,
                                         ApiError.ErrorStatus.UNAUTHORIZED,
                                         ApiError.ErrorStatus.FORBIDDEN,
@@ -105,7 +102,11 @@ val networkModules = module {
                                             userRepository.clear()
                                         }
 
-                                        else -> {}
+                                        else -> {
+                                            if (it.code == 200) {
+                                                userRepository.clear()
+                                            }
+                                        }
                                     }
                                 }
                                 throw it
@@ -116,10 +117,12 @@ val networkModules = module {
             }
         }.apply {
             receivePipeline.intercept(HttpReceivePipeline.Before) {
-                val responseBody = it.bodyAsText()
-                val json = get<Json>().parseToJsonElement(responseBody).jsonObject
-                if (json.contains("ok") && !json.jsonObject["ok"]!!.jsonPrimitive.boolean) {
-                    throw ClientFailedException(it, responseBody)
+                if (it.status.value == 200) {
+                    val responseBody = it.bodyAsText()
+                    val json = get<Json>().parseToJsonElement(responseBody).jsonObject
+                    if (json.contains("ok") && !json.jsonObject["ok"]!!.jsonPrimitive.boolean) {
+                        throw ClientFailedException(it, responseBody)
+                    }
                 }
                 this.proceedWith(it)
             }
@@ -130,7 +133,6 @@ val networkModules = module {
 private suspend fun refreshAccessToken(
     client: HttpClient,
     refreshToken: String,
-    phone: PhoneNumber?
 ): LoginDto {
     val response: HttpResponse = client.submitForm(
         url = "${ApiV1}login/token/",
@@ -138,8 +140,6 @@ private suspend fun refreshAccessToken(
             append("refresh_token", refreshToken)
             append("client_id", client_id)
             append("grant_type", "refresh_token")
-            append("phone", phone?.phone.orEmpty())
-            append("phone_number", phone?.phone.orEmpty())
         }
     )
     return response.body()
