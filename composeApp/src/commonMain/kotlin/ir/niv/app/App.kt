@@ -27,9 +27,7 @@ import org.koin.compose.KoinApplication
 @Composable
 @Preview
 fun AppWithDI() {
-    KoinApplication(
-        application = { modules(koinModules) }
-    ) {
+    KoinApplication(application = { modules(koinModules) }) {
         App()
     }
 

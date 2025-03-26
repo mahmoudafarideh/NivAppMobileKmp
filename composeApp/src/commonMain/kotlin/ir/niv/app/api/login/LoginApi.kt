@@ -31,7 +31,7 @@ class LoginApi(private val client: HttpClient) {
             formParameters = parameters {
                 append("phone_number", phoneNumber.phone)
                 append("phone", phoneNumber.phone)
-                append("generated_code", otpCode.code)
+                append("otp", otpCode.code)
                 append("client_id", client_id)
                 append("grant_type", "otp")
             }

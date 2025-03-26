@@ -40,7 +40,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 const val PhoneNumberInputKey = "phone_number"
-const val OtpInputKey = "generated_code"
+const val OtpInputKey = "otp"
 
 @Composable
 internal fun LoginScreen(

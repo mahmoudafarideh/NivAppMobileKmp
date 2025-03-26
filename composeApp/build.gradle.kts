@@ -18,26 +18,6 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
-    @OptIn(ExperimentalWasmDsl::class)
-    wasmJs {
-        moduleName = "composeApp"
-        browser {
-            val rootDirPath = project.rootDir.path
-            val projectDirPath = project.projectDir.path
-            commonWebpackConfig {
-                outputFileName = "composeApp.js"
-                devServer = (devServer ?: KotlinWebpackConfig.DevServer()).apply {
-                    static = (static ?: mutableListOf()).apply {
-                        // Serve sources to debug inside browser
-                        add(rootDirPath)
-                        add(projectDirPath)
-                    }
-                }
-            }
-        }
-        binaries.executable()
-    }
 
     js(IR) {
         moduleName = "composeApp"
@@ -60,9 +40,6 @@ kotlin {
     }
 
     sourceSets {
-        wasmJsMain.dependencies {
-            implementation(libs.kstore.storage)
-        }
         jsMain.dependencies {
             implementation(libs.kstore.storage)
         }

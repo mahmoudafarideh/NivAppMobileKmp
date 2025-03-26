@@ -3,7 +3,6 @@ package ir.niv.app.di
 import io.ktor.client.HttpClient
 import io.ktor.client.call.body
 import io.ktor.client.plugins.DefaultRequest
-import io.ktor.client.plugins.HttpCallValidator
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.auth.Auth
 import io.ktor.client.plugins.auth.providers.BearerTokens
@@ -14,6 +13,7 @@ import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
 import io.ktor.client.plugins.logging.SIMPLE
 import io.ktor.client.request.forms.submitForm
+import io.ktor.client.statement.HttpReceivePipeline
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
@@ -26,7 +26,9 @@ import ir.niv.app.api.login.client_id
 import ir.niv.app.domain.core.PhoneNumber
 import ir.niv.app.domain.core.UserRepository
 import ir.niv.app.domain.repository.AuthRepository
+import ir.niv.app.ui.core.ApiError
 import ir.niv.app.ui.utils.ClientFailedException
+import ir.niv.app.ui.utils.traceErrorException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.jsonObject
@@ -76,29 +78,50 @@ val networkModules = module {
                         )
                     }
                     refreshTokens {
-                        val newAccessToken = refreshAccessToken(
+                        runCatching {
+                            refreshAccessToken(
                                 this.client,
                                 authRepository.refreshToken.orEmpty(),
                                 userRepository.userFlow.value?.phone
                             )
-                        authRepository.updateTokens(
-                            newAccessToken.accessToken, newAccessToken.refreshToken
-                        )
-                        BearerTokens(
-                            newAccessToken.accessToken,
-                            authRepository.refreshToken.orEmpty()
+
+                        }.fold(
+                            onSuccess = { newAccessToken ->
+                                authRepository.updateTokens(
+                                    newAccessToken.accessToken, newAccessToken.refreshToken
+                                )
+                                BearerTokens(
+                                    newAccessToken.accessToken,
+                                    authRepository.refreshToken.orEmpty()
+                                )
+                            },
+                            onFailure = {
+                                traceErrorException(it).let {
+                                    when(it.errorStatus) {
+                                        ApiError.ErrorStatus.BAD_REQUEST,
+                                        ApiError.ErrorStatus.UNAUTHORIZED,
+                                        ApiError.ErrorStatus.FORBIDDEN,
+                                        ApiError.ErrorStatus.METHOD_NOT_ALLOWED -> {
+                                            userRepository.clear()
+                                        }
+
+                                        else -> {}
+                                    }
+                                }
+                                throw it
+                            }
                         )
                     }
                 }
             }
-            install(HttpCallValidator) {
-                validateResponse { response ->
-                    val responseBody = response.bodyAsText()
-                    val json = get<Json>().parseToJsonElement(responseBody).jsonObject
-                    if (json.contains("ok") && !json.jsonObject["ok"]!!.jsonPrimitive.boolean) {
-                        throw ClientFailedException(response, responseBody)
-                    }
+        }.apply {
+            receivePipeline.intercept(HttpReceivePipeline.Before) {
+                val responseBody = it.bodyAsText()
+                val json = get<Json>().parseToJsonElement(responseBody).jsonObject
+                if (json.contains("ok") && !json.jsonObject["ok"]!!.jsonPrimitive.boolean) {
+                    throw ClientFailedException(it, responseBody)
                 }
+                this.proceedWith(it)
             }
         }
     }
