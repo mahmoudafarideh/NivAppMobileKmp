@@ -69,7 +69,7 @@ internal fun LoginScreen(
                 ) {
                     Icon(
                         painter = painterResource(Res.drawable.logo),
-                        tint = NivTheme.colorScheme.primary,
+                        tint = NivTheme.colorScheme.secondary,
                         contentDescription = null,
                         modifier = Modifier.size(56.dp)
                     )

@@ -35,8 +35,9 @@ import kotlinx.serialization.json.jsonPrimitive
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
-const val BaseUrl = "https://nivapp.ir/user/api/"
-const val ApiV1 = BaseUrl + "v1/"
+const val BaseUrl = "https://nivapp.ir"
+const val BaseApiUrl = "$BaseUrl/user/api/"
+const val ApiV1 = BaseApiUrl + "v1/"
 
 val apiModules = module {
     singleOf(::LoginApi)
@@ -54,7 +55,7 @@ val networkModules = module {
                 )
             }
             install(DefaultRequest) {
-                url(BaseUrl)
+                url(BaseApiUrl)
                 headers.append("Accept", "application/json")
             }
             install(Logging) {

@@ -26,7 +26,6 @@ import ir.niv.app.ui.login.graph.LoginRoute
 import ir.niv.app.ui.login.graph.routes.navigator
 import ir.niv.app.ui.theme.button.NivButton
 import ir.niv.app.ui.theme.theme.NivTheme
-import ir.niv.app.ui.utils.logInfo
 import m.a.compilot.navigation.controller.LocalNavController
 import m.a.compilot.navigation.controller.comPilotNavController
 import nivapp.composeapp.generated.resources.Res
@@ -45,13 +44,10 @@ fun SplashScreen(modifier: Modifier = Modifier) {
         val navController = LocalNavController.comPilotNavController
         LaunchedEffect(state) {
             state.onRetrieve { isLoggedIn ->
-                navController.navController.currentBackStack.value.let {
-                    logInfo("SXO", it.map { it.destination.route })
-                }
                 if (isLoggedIn) {
                     navController.clearBackStack().navigate(HomeRoute.navigator)
                 } else {
-                    navController.navigate(LoginRoute.navigator)
+                    navController.clearBackStack().navigate(LoginRoute.navigator)
                 }
             }
         }
@@ -65,7 +61,7 @@ fun SplashScreen(modifier: Modifier = Modifier) {
                 Icon(
                     painter = painterResource(Res.drawable.logo),
                     contentDescription = null,
-                    tint = NivTheme.colorScheme.primary,
+                    tint = NivTheme.colorScheme.secondary,
                     modifier = Modifier.size(76.dp)
                 )
                 Spacer(modifier = Modifier.size(48.dp))

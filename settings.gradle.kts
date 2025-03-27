@@ -35,7 +35,3 @@ dependencyResolutionManagement {
 }
 
 include(":composeApp")
-include(":compilot:compiler")
-include(":compilot:common")
-include(":compilot:runtime")
-include(":compilot:navigation")

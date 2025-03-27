@@ -2,6 +2,7 @@ package ir.niv.app.ui.core
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import ir.niv.app.ui.utils.logInfo
 import ir.niv.app.ui.utils.traceErrorException
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -55,6 +56,7 @@ open class BaseViewModel<T>(
             }.onSuccess {
                 data(Retrieved(it))
             }.onFailure {
+                logInfo("SXO", it)
                 val apiError = traceErrorException(it)
                 apiError.errors?.let { errors ->
                     _responseUiState.update {
@@ -69,7 +71,7 @@ open class BaseViewModel<T>(
         }
     }
 
-    protected suspend fun <T> getDeferredDataFlow(
+    protected fun <T> getDeferredDataFlow(
         action: suspend () -> T,
     ): Flow<DeferredData<T>> {
         return flow {
@@ -78,6 +80,7 @@ open class BaseViewModel<T>(
             }.onSuccess {
                 emit(Retrieved(it))
             }.onFailure {
+                logInfo("SXO", it)
                 val apiError = traceErrorException(it)
                 emit(FailedApi(apiError))
             }

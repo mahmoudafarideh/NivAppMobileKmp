@@ -1,10 +1,13 @@
 package ir.niv.app.ui.theme.theme
 
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.text.font.FontFamily
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.vazirmatn_bold
@@ -14,17 +17,30 @@ import org.jetbrains.compose.resources.Font
 
 @Composable
 fun NivTheme(
-    colorScheme: ColorScheme = MaterialTheme.colorScheme,
+    darkTheme: Boolean = isSystemInDarkTheme(),
     shapes: Shapes = MaterialTheme.shapes,
     content: @Composable () -> Unit
 ) {
+    val colorScheme = when {
+        darkTheme -> darkScheme
+        else -> lightScheme
+    }
+    val extendedColorScheme = when {
+        darkTheme -> extendedDark
+        else -> extendedLight
+    }
+
     val typography = getTypography()
-    MaterialTheme(
-        colorScheme = colorScheme,
-        shapes = shapes,
-        typography = typography,
-        content = content,
-    )
+    CompositionLocalProvider(
+        LocalExtendedColorScheme provides extendedColorScheme
+    ) {
+        MaterialTheme(
+            colorScheme = colorScheme,
+            shapes = shapes,
+            typography = typography,
+            content = content,
+        )
+    }
 }
 
 @Composable
@@ -79,3 +95,8 @@ private fun getTypography(): Typography = MaterialTheme.typography.let {
 }
 
 typealias NivTheme = MaterialTheme
+
+val MaterialTheme.extendedColors: ExtendedColorScheme
+    @Composable
+    @ReadOnlyComposable
+    get() = LocalExtendedColorScheme.current

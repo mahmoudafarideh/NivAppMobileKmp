@@ -5,11 +5,16 @@ android-minSdk = "24"
 android-targetSdk = "35"
 androidx-activityCompose = "1.10.1"
 androidx-lifecycle = "2.8.4"
+coilCompose = "3.1.0"
+coilNetworkKtor3 = "3.1.0"
 compose-multiplatform = "1.7.3"
+composeShimmer = "1.3.2"
+kamelImageDefault = "1.0.3"
 koin = "4.0.1"
 kotlin = "2.1.10"
 kotlinxCoroutinesCore = "1.10.1"
 ktorClientJava = "3.1.0"
+ktorClientJs = "3.1.1"
 multiplatformSettings = "1.3.0"
 multiplatformSettingsNoArg = "1.1.1"
 navigationCompose = "2.8.0-alpha10"
@@ -17,12 +22,17 @@ kotlinx-serialization = "1.8.0"
 kstore = "0.9.1"
 kotlinStdlib = "2.1.10"
 kotlinTest = "2.1.10"
-runner = "1.5.2"
-core = "1.5.0"
+runner = "1.6.2"
+core = "1.6.1"
 junit = "1.2.1"
 ksp = "2.1.0-1.0.29"
+compilot = "0.0.1-beta01"
 
 [libraries]
+coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coilNetworkKtor3" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coilCompose" }
+compose-shimmer = { module = "com.valentinilk.shimmer:compose-shimmer", version.ref = "composeShimmer" }
+kamel-image-default = { module = "media.kamel:kamel-image-default", version.ref = "kamelImageDefault" }
 koin-android = { module = "io.insert-koin:koin-android", version.ref = "koin" }
 koin-android-compose = { module = "io.insert-koin:koin-androidx-compose", version.ref = "koin" }
 koin-core = { module = "io.insert-koin:koin-core", version.ref = "koin" }
@@ -38,6 +48,7 @@ ktor-client-android = { module = "io.ktor:ktor-client-android", version.ref = "k
 ktor-client-auth = { module = "io.ktor:ktor-client-auth", version.ref = "ktorClientJava" }
 ktor-client-content-negotiation = { module = "io.ktor:ktor-client-content-negotiation", version.ref = "ktorClientJava" }
 ktor-client-core = { module = "io.ktor:ktor-client-core", version.ref = "ktorClientJava" }
+ktor-client-js = { module = "io.ktor:ktor-client-js", version.ref = "ktorClientJs" }
 ktor-client-logging = { module = "io.ktor:ktor-client-logging", version.ref = "ktorClientJava" }
 ktor-client-serialization = { module = "io.ktor:ktor-client-serialization", version.ref = "ktorClientJava" }
 ktor-client-serialization-json = { module = "io.ktor:ktor-serialization-kotlinx-json", version.ref = "ktorClientJava" }
@@ -55,6 +66,11 @@ kotlin-test = { group = "org.jetbrains.kotlin", name = "kotlin-test", version.re
 androidx-runner = { group = "androidx.test", name = "runner", version.ref = "runner" }
 androidx-core = { group = "androidx.test", name = "core", version.ref = "core" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junit" }
+
+compilot-runtime = { group = "io.github.mahmoudafarideh.compilot.kmp", name = "runtime", version.ref = "compilot" }
+compilot-compiler = { group = "io.github.mahmoudafarideh.compilot.kmp", name = "compiler", version.ref = "compilot" }
+compilot-navigation = { group = "io.github.mahmoudafarideh.compilot.kmp", name = "navigation", version.ref = "compilot" }
+compilot-common = { group = "io.github.mahmoudafarideh.compilot.kmp", name = "common", version.ref = "compilot" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

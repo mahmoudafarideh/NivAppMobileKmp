@@ -74,15 +74,21 @@ kotlin {
 
                 implementation(libs.kotlinx.coroutines.core)
 
-                implementation(project(":compilot:common"))
-                implementation(project(":compilot:runtime"))
-                implementation(project(":compilot:navigation"))
+                implementation(libs.compilot.common)
+                implementation(libs.compilot.runtime)
+                implementation(libs.compilot.navigation)
+
+                implementation(libs.compose.shimmer)
+                implementation(libs.coil.compose)
+                implementation(libs.coil.network.ktor3)
             }
         }
         jsMain.dependencies {
             implementation(libs.kstore.storage)
+            implementation(libs.ktor.client.js)
         }
         androidMain.dependencies {
+            implementation(libs.ktor.client.android)
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.kstore.file)
@@ -125,7 +131,7 @@ android {
 
 dependencies {
     debugImplementation(compose.uiTooling)
-    add("kspCommonMainMetadata", project(":compilot:compiler"))
+    add("kspCommonMainMetadata", libs.compilot.compiler)
 }
 
 tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().all {

@@ -2,11 +2,9 @@ package ir.niv.app.ui.theme.button
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.ui.graphics.Color
 import ir.niv.app.ui.theme.theme.NivTheme
-import ir.niv.app.ui.theme.theme.onSuccess
-import ir.niv.app.ui.theme.theme.onSuccessContainer
-import ir.niv.app.ui.theme.theme.success
-import ir.niv.app.ui.theme.theme.successContainer
+import ir.niv.app.ui.theme.theme.extendedColors
 
 enum class NivButtonStyle {
     Primary,
@@ -29,8 +27,8 @@ enum class NivButtonStyle {
         }
 
         Success -> when (buttonState) {
-            NivButtonState.Disable -> NivTheme.colorScheme.successContainer
-            else -> NivTheme.colorScheme.success
+            NivButtonState.Disable -> NivTheme.extendedColors.success.colorContainer
+            else -> NivTheme.extendedColors.success.color
         }
 
         Neutral -> when (buttonState) {
@@ -42,7 +40,7 @@ enum class NivButtonStyle {
 
     @Composable
     @ReadOnlyComposable
-    fun getContentColor(buttonState: NivButtonState) = when (this) {
+    fun getContentColor(buttonState: NivButtonState): Color = when (this) {
         Primary -> when (buttonState) {
             NivButtonState.Disable -> NivTheme.colorScheme.onPrimaryContainer
             else -> NivTheme.colorScheme.onPrimary
@@ -54,14 +52,14 @@ enum class NivButtonStyle {
             else -> NivTheme.colorScheme.onError
         }
 
-        Success -> when (buttonState) {
-            NivButtonState.Disable -> NivTheme.colorScheme.onSuccessContainer
-            else -> NivTheme.colorScheme.onSuccess
-        }
-
         Neutral -> when (buttonState) {
             NivButtonState.Disable -> NivTheme.colorScheme.onSurface
             else -> NivTheme.colorScheme.onSurface
+        }
+
+        Success -> when (buttonState) {
+            NivButtonState.Disable -> NivTheme.extendedColors.success.colorContainer
+            else -> NivTheme.extendedColors.success.onColorContainer
         }
     }
 
