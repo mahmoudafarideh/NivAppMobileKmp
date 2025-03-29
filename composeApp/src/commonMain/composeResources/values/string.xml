@@ -8,5 +8,6 @@
     <string name="login_phone_input">شماره موبایل</string>
     <string name="login_otp_input">کد ورود</string>
     <string name="retry">تلاش دوباره</string>
+    <string name="home_hello_label">سلام</string>
     <string name="splash_app_info">نیواپ | v1.0.0</string>
 </resources>

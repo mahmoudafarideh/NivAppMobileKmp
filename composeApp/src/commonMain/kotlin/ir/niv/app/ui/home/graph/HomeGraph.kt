@@ -13,6 +13,6 @@ fun NavGraphBuilder.homeGraph() {
     HomeRoute.screen(this) {
         val homeViewModel: HomeViewModel = koinViewModel()
         val state by homeViewModel.state.collectAsStateWithLifecycle()
-        HomeScreen(avatar = state.avatar)
+        HomeScreen(user = state.user)
     }
 }
