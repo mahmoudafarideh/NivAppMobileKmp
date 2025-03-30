@@ -8,7 +8,9 @@ import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
+import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.unit.LayoutDirection
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.vazirmatn_bold
 import nivapp.composeapp.generated.resources.vazirmatn_medium
@@ -40,6 +42,15 @@ fun NivTheme(
             typography = typography,
             content = content,
         )
+    }
+}
+
+@Composable
+fun NivThemePreview(content: @Composable () -> Unit) {
+    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
+        NivTheme {
+            content()
+        }
     }
 }
 

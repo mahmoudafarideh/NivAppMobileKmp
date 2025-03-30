@@ -3,6 +3,7 @@ package ir.niv.app.ui.home.screen
 import androidx.lifecycle.viewModelScope
 import ir.niv.app.domain.core.UserRepository
 import ir.niv.app.ui.core.BaseViewModel
+import ir.niv.app.ui.home.models.HomeGridItemUiModel
 import ir.niv.app.ui.home.models.UserUiModel
 import kotlinx.coroutines.launch
 
@@ -13,6 +14,7 @@ class HomeViewModel(
 ) {
     data class State(
         val user: UserUiModel? = null,
+        val grid: List<HomeGridItemUiModel> = HomeGridItemUiModel.getItems()
     )
 
     init {

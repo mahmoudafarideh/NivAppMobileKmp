@@ -23,22 +23,22 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import ir.niv.app.ui.home.components.HomeAppBar
 import ir.niv.app.ui.home.components.HomeSearchBar
+import ir.niv.app.ui.home.models.HomeGridItemUiModel
 import ir.niv.app.ui.home.models.UserUiModel
 import ir.niv.app.ui.theme.shape.squircle.SquircleShape
 import ir.niv.app.ui.theme.theme.NivTheme
-import nivapp.composeapp.generated.resources.Res
-import nivapp.composeapp.generated.resources.notifications_24px
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     user: UserUiModel?,
-    modifier: Modifier = Modifier
+    grid: List<HomeGridItemUiModel>,
+    modifier: Modifier = Modifier,
 ) {
     Scaffold(
         modifier = modifier,
@@ -47,16 +47,7 @@ fun HomeScreen(
         }
     ) {
         val itemShape = remember { SquircleShape() }
-        val items = remember {
-            listOf(
-                Triple("باشگاه", Color(0xFFcefce1), Color(0xFF28af62)),
-                Triple("تمرین", Color(0xFFfacfd6), Color(0xFFf33d5b)),
-                Triple("غذا", Color(0xFFd2e3fa), Color(0xFF3080ed)),
-                Triple("مربیان", Color(0xFFd7d7f9), Color(0xFF5556ce)),
-                Triple("حرکات بدنسازی", Color(0xFFfbd2e1), Color(0xFFb3446c)),
-                Triple("دوستان", Color(0xFFf2d9fb), Color(0xFFaa20dd))
-            )
-        }
+
         LazyVerticalGrid(
             columns = GridCells.Fixed(3),
             modifier = Modifier.padding(it).fillMaxWidth(),
@@ -66,17 +57,15 @@ fun HomeScreen(
             item(span = { GridItemSpan(3) }, key = "SearchBar") {
                 HomeSearchBar(
                     modifier = Modifier.fillMaxWidth()
-                        .padding(start = 16.dp, end = 4.dp, top = 24.dp),
+                        .padding(start = 16.dp, end = 4.dp, top = 24.dp, bottom = 16.dp),
                     onSearchClick = {},
                     onMapClick = {}
                 )
             }
             items(
-                items = items,
-                key = {
-                    it
-                }
-            ) {
+                items = grid,
+                key = { grid -> grid.type.name }
+            ) { grid ->
                 Box(
                     modifier = Modifier.aspectRatio(1f),
                     contentAlignment = Alignment.Center
@@ -88,19 +77,19 @@ fun HomeScreen(
                             modifier = Modifier
                                 .size(64.dp)
                                 .clip(itemShape)
-                                .background(it.second),
+                                .background(grid.type.backgroundColor),
                             contentAlignment = Alignment.Center
                         ) {
                             Icon(
-                                painter = painterResource(Res.drawable.notifications_24px),
-                                tint = it.third,
+                                painter = painterResource(grid.type.icon),
+                                tint = grid.type.iconTint,
                                 contentDescription = null,
                                 modifier = Modifier.align(Alignment.Center).size(32.dp)
                             )
                         }
                         Spacer(modifier = Modifier.height(6.dp))
                         Text(
-                            text = it.first,
+                            text = stringResource(grid.type.label),
                             style = NivTheme.typography.bodyMedium,
                         )
                     }
