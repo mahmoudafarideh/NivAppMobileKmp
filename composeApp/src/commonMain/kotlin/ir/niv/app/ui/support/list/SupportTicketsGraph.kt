@@ -40,7 +40,7 @@ fun NavGraphBuilder.supportTicketsGraph() {
             },
             listState = listState,
             onNewButtonClick = {
-                navigation.navigate(SubmitTicketRoute.navigator)
+                navigation.safeNavigate().navigate(SubmitTicketRoute.navigator)
             }
         )
     }

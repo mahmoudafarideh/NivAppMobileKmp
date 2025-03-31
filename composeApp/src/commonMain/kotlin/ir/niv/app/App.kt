@@ -1,5 +1,7 @@
 package ir.niv.app
 
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.SnackbarHost
@@ -55,7 +57,9 @@ fun App() {
             Box {
                 NavHost(
                     navController = navController,
-                    startDestination = SplashRoute.navigationRoute()
+                    startDestination = SplashRoute.navigationRoute(),
+                    enterTransition = { EnterTransition.None },
+                    exitTransition = { ExitTransition.None },
                 ) {
                     splashNavGraph()
                     loginGraph()
