@@ -20,7 +20,12 @@ import androidx.compose.ui.unit.dp
 import ir.niv.app.ui.components.IconButton
 import ir.niv.app.ui.components.UrlImage
 import ir.niv.app.ui.home.models.UserUiModel
+import ir.niv.app.ui.support.list.SupportTicketsRoute
+import ir.niv.app.ui.support.list.routes.navigator
 import ir.niv.app.ui.theme.theme.NivTheme
+import ir.niv.app.ui.utils.logInfo
+import m.a.compilot.navigation.controller.LocalNavController
+import m.a.compilot.navigation.controller.comPilotNavController
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.home_hello_label
 import nivapp.composeapp.generated.resources.notifications_24px
@@ -34,6 +39,7 @@ internal fun HomeAppBar(
     user: UserUiModel?,
     modifier: Modifier = Modifier
 ) {
+    val navigation = LocalNavController.comPilotNavController
     TopAppBar(
         modifier = modifier,
         title = {
@@ -66,13 +72,16 @@ internal fun HomeAppBar(
         actions = {
             IconButton(
                 painter = painterResource(Res.drawable.notifications_24px),
-                modifier = modifier.padding(vertical = 4.dp),
+                modifier = Modifier.padding(vertical = 4.dp),
                 onClick = {}
             )
             IconButton(
                 painter = painterResource(Res.drawable.support_agent_24px),
-                modifier = modifier.padding(4.dp),
-                onClick = {}
+                modifier = Modifier.padding(4.dp),
+                onClick = {
+                    logInfo("SXO", "HERE IS HERE")
+                    navigation.navigate(SupportTicketsRoute.navigator)
+                }
             )
         }
     )

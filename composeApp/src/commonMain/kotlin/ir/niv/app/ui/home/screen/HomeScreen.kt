@@ -30,8 +30,10 @@ import ir.niv.app.ui.home.models.HomeGridItemUiModel
 import ir.niv.app.ui.home.models.UserUiModel
 import ir.niv.app.ui.theme.shape.squircle.SquircleShape
 import ir.niv.app.ui.theme.theme.NivTheme
+import ir.niv.app.ui.theme.theme.NivThemePreview
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -96,5 +98,20 @@ fun HomeScreen(
                 }
             }
         }
+    }
+}
+
+
+@Preview
+@Composable
+private fun HomeScreenPreview() {
+    NivThemePreview {
+        HomeScreen(
+            user = UserUiModel(
+                avatar = "",
+                name = "محمود"
+            ),
+            grid = HomeGridItemUiModel.getItems()
+        )
     }
 }

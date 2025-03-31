@@ -81,6 +81,8 @@ kotlin {
                 implementation(libs.compose.shimmer)
                 implementation(libs.coil.compose)
                 implementation(libs.coil.network.ktor3)
+                implementation(libs.immutable.collections)
+
             }
         }
         jsMain.dependencies {

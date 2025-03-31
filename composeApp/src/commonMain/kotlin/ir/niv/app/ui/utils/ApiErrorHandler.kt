@@ -4,6 +4,7 @@ import io.ktor.client.plugins.ClientRequestException
 import io.ktor.client.plugins.HttpRequestTimeoutException
 import io.ktor.client.statement.bodyAsText
 import ir.niv.app.ui.core.ApiError
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.io.IOException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonArray
@@ -57,7 +58,7 @@ suspend fun traceErrorException(throwable: Throwable?): ApiError {
             errorStatus = ApiError.ErrorStatus.UNKNOWN_ERROR
         }
     }
-    return ApiError(message, errorCode, errorStatus, toast, inputErrors)
+    return ApiError(message, errorCode, errorStatus, toast, inputErrors?.toImmutableMap())
 }
 
 private fun getErrorStatus(code: Int): ApiError.ErrorStatus {
@@ -82,6 +83,7 @@ private fun getErrorBody(response: String): JsonObject? {
     }
 }
 
+@Suppress("MemberExtensionConflict")
 private fun getToastMessage(errorJson: JsonObject): ApiError.Toast? {
     if (errorJson.contains("toast")) {
         return ApiError.Toast(

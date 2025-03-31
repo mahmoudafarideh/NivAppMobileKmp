@@ -20,28 +20,24 @@ import io.ktor.http.ContentType
 import io.ktor.http.parameters
 import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
 import io.ktor.serialization.kotlinx.json.json
-import ir.niv.app.api.login.LoginApi
 import ir.niv.app.api.login.LoginDto
 import ir.niv.app.api.login.client_id
 import ir.niv.app.domain.core.UserRepository
 import ir.niv.app.domain.repository.AuthRepository
 import ir.niv.app.ui.core.ApiError
 import ir.niv.app.ui.utils.ClientFailedException
+import ir.niv.app.ui.utils.logInfo
 import ir.niv.app.ui.utils.traceErrorException
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.boolean
 import kotlinx.serialization.json.jsonObject
 import kotlinx.serialization.json.jsonPrimitive
-import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.module
 
 const val BaseUrl = "https://nivapp.ir"
 const val BaseApiUrl = "$BaseUrl/user/api/"
 const val ApiV1 = BaseApiUrl + "v1/"
 
-val apiModules = module {
-    singleOf(::LoginApi)
-}
 val networkModules = module {
     single<HttpClient> {
         HttpClient {
@@ -94,7 +90,7 @@ val networkModules = module {
                                 )
                             },
                             onFailure = {
-                                traceErrorException(it).let {
+                                traceErrorException(it).let { it ->
                                     when (it.errorStatus) {
                                         ApiError.ErrorStatus.BAD_REQUEST,
                                         ApiError.ErrorStatus.UNAUTHORIZED,
@@ -118,6 +114,7 @@ val networkModules = module {
             }
         }.apply {
             receivePipeline.intercept(HttpReceivePipeline.Before) {
+                logInfo("SXO", it.bodyAsText())
                 if (it.status.value == 200) {
                     val responseBody = it.bodyAsText()
                     val json = get<Json>().parseToJsonElement(responseBody).jsonObject

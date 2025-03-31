@@ -23,6 +23,7 @@ import ir.niv.app.ui.login.graph.routes.navigator
 import ir.niv.app.ui.splash.graph.SplashRoute
 import ir.niv.app.ui.splash.graph.routes.navigationRoute
 import ir.niv.app.ui.splash.graph.splashNavGraph
+import ir.niv.app.ui.support.list.supportTicketsGraph
 import ir.niv.app.ui.theme.theme.NivTheme
 import ir.niv.app.ui.utils.LocalSnackBarHostState
 import kotlinx.coroutines.delay
@@ -59,6 +60,7 @@ fun App() {
                     splashNavGraph()
                     loginGraph()
                     homeGraph()
+                    supportTicketsGraph()
                 }
 
                 val appViewModel: AppViewModel = koinViewModel()

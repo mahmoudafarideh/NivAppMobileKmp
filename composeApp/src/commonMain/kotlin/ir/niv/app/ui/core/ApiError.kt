@@ -1,5 +1,9 @@
 package ir.niv.app.ui.core
 
+import androidx.compose.runtime.Stable
+import kotlinx.collections.immutable.ImmutableMap
+
+@Stable
 /**
  * Designed to show different types of errors through error status & message
  *
@@ -9,8 +13,10 @@ data class ApiError(
     val code: Int?,
     val errorStatus: ErrorStatus,
     val toast: Toast? = null,
-    val errors: Map<String, String>? = null
+    val errors: ImmutableMap<String, String>? = null
 ) {
+
+    @Stable
     /**
      * Various error status to know what happened if something goes wrong with a repository call
      */
@@ -71,6 +77,7 @@ data class ApiError(
         UNKNOWN_ERROR
     }
 
+    @Stable
     enum class ToastType {
         SUCCESS,
         DANGER,
@@ -78,21 +85,25 @@ data class ApiError(
         DEFAULT
     }
 
+    @Stable
     data class Toast(
         val message: String,
         val status: ToastType = ToastType.DEFAULT
     )
 
+    @Stable
     data class InputError(
         val inputName: String,
         val errorsList: List<String>
     )
 
+    @Stable
     enum class ErrorMessage {
         CHECK_NETWORK_CONNECTION,
         PROBLEM_OCCUR
     }
 
+    @Stable
     val message by lazy {
         when (errorStatus) {
             ErrorStatus.NO_CONNECTION, ErrorStatus.TIMEOUT -> ErrorMessage.CHECK_NETWORK_CONNECTION

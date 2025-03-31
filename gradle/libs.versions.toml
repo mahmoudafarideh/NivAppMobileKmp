@@ -21,6 +21,7 @@ kotlinx-serialization = "1.8.0"
 kstore = "0.9.1"
 ksp = "2.1.20-1.0.32"
 compilot = "0.0.1-beta01"
+immutalbeCollections = "0.3.8"
 
 [libraries]
 coil-network-ktor3 = { module = "io.coil-kt.coil3:coil-network-ktor3", version.ref = "coilNetworkKtor3" }
@@ -58,6 +59,9 @@ compilot-runtime = { group = "io.github.mahmoudafarideh.compilot.kmp", name = "r
 compilot-compiler = { group = "io.github.mahmoudafarideh.compilot.kmp", name = "compiler", version.ref = "compilot" }
 compilot-navigation = { group = "io.github.mahmoudafarideh.compilot.kmp", name = "navigation", version.ref = "compilot" }
 compilot-common = { group = "io.github.mahmoudafarideh.compilot.kmp", name = "common", version.ref = "compilot" }
+
+immutable-collections = { group="org.jetbrains.kotlinx", name="kotlinx-collections-immutable", version.ref="immutalbeCollections" }
+
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

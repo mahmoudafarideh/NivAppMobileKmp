@@ -15,5 +15,6 @@
     <string name="home_grid_coach_label">مربی من</string>
     <string name="home_grid_exercise_label">حرکات بدنسازی</string>
     <string name="home_grid_friend_label">دوستان من</string>
+    <string name="tickets_list_title">پشتیبانی</string>
     <string name="splash_app_info">نیواپ | v1.0.0</string>
 </resources>
