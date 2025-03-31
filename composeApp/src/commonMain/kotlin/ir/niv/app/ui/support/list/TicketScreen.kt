@@ -42,6 +42,7 @@ fun TicketScreen(
     tickets: ContinuousDeferredData<ImmutableList<TicketUiModel>>,
     listState: LazyListState,
     onRetryClick: () -> Unit,
+    onNewButtonClick: () -> Unit,
     onItemClick: (Long) -> Unit,
     onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -62,7 +63,7 @@ fun TicketScreen(
                 actions = {
                     IconButton(
                         painter = painterResource(Res.drawable.plus_small_24),
-                        onClick = {}
+                        onClick = onNewButtonClick
                     )
                 }
             )
@@ -132,6 +133,7 @@ private fun TicketScreenPreview() {
             ),
             onRetryClick = {},
             onItemClick = {},
+            onNewButtonClick = {},
             onBackButtonClick = {},
             listState = rememberLazyListState(),
         )

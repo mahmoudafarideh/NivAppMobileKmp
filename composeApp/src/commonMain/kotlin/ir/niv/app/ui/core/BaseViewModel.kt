@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import ir.niv.app.ui.utils.logInfo
 import ir.niv.app.ui.utils.traceErrorException
 import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
@@ -90,7 +91,12 @@ open class BaseViewModel<T>(
                 }
                 action(currentState.page, currentState.limit)
             }.onSuccess {
-                data(currentState.retrieved(it, it.size < currentState.limit))
+                data(
+                    currentState.retrieved(
+                        (currentState.data.orEmpty() + it).toImmutableList(),
+                        it.size < currentState.limit
+                    )
+                )
             }.onFailure {
                 logInfo("SXO", it)
                 val apiError = traceErrorException(it)
