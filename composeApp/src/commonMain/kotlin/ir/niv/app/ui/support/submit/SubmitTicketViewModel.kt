@@ -33,12 +33,11 @@ class SubmitTicketViewModel(
         getDeferredData(
             currentState = currentState.state,
             action = {
-                val ticketId = supportRepository.submitTicket(
+                supportRepository.submitTicket(
                     category = category,
                     subject = currentState.subject,
                     message = currentState.message
                 )
-                Unit
             },
             data = {
                 updateState { copy(state = it) }

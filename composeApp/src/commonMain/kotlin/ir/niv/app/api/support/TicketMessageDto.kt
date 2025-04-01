@@ -13,7 +13,7 @@ data class TicketMessageDto(
     @SerialName("text")
     val content: String,
     @SerialName("admin")
-    val admin: Admin?,
+    val admin: Admin? = null,
 ) {
     @Serializable
     data class Admin(

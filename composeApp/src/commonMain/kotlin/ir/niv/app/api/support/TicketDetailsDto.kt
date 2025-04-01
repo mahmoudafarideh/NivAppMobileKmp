@@ -5,6 +5,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
+data class TicketDetailsResponseDto(
+    @SerialName("ticket")
+    val ticket: TicketDetailsDto,
+)
+
+@Serializable
 data class TicketDetailsDto(
     @SerialName("id")
     val id: Long,

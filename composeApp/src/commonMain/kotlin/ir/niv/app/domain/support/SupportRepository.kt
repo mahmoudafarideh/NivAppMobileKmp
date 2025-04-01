@@ -2,6 +2,7 @@ package ir.niv.app.domain.support
 
 import ir.niv.app.api.support.TicketsApi
 import ir.niv.app.api.support.toTicketDetail
+import ir.niv.app.api.support.toTicketMessage
 import ir.niv.app.api.support.toUserTicketList
 
 class SupportRepository(
@@ -20,5 +21,8 @@ class SupportRepository(
             message = message
         ).insertId
 
-    suspend fun getTicket(id: Long) = ticketsApi.getTicket(id).toTicketDetail()
+    suspend fun sendMessage(id: Long, message: String) =
+        ticketsApi.sendMessage(id, message).toTicketMessage()
+
+    suspend fun getTicket(id: Long) = ticketsApi.getTicket(id).ticket.toTicketDetail()
 }

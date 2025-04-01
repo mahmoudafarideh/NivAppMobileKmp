@@ -10,6 +10,7 @@ import ir.niv.app.di.ApiV1
 
 private const val TicketsUrl = ApiV1 + "tickets/?page="
 private const val AddTicketUrl = ApiV1 + "addticket/"
+private const val AddTicketMessageUrl = ApiV1 + "addticketmessage/"
 private const val TicketDetailsUrl = ApiV1 + "ticket/"
 
 class TicketsApi(private val client: HttpClient) {
@@ -31,6 +32,15 @@ class TicketsApi(private val client: HttpClient) {
             }
         ).body()
 
-    suspend fun getTicket(id: Long): TicketDetailsDto = client
+    suspend fun getTicket(id: Long): TicketDetailsResponseDto = client
         .get(urlString = "$TicketDetailsUrl$id/").body()
+
+    suspend fun sendMessage(id: Long, message: String): TicketMessageDto = client
+        .submitForm(
+            url = AddTicketMessageUrl,
+            formParameters = parameters {
+                append("id", "$id")
+                append("message", message)
+            }
+        ).body()
 }

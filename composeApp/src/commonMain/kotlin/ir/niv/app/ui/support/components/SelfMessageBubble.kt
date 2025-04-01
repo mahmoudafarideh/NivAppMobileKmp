@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
+import ir.niv.app.ui.core.localized
 import ir.niv.app.ui.support.details.TicketMessageUiModel
 import ir.niv.app.ui.theme.theme.NivTheme
 
@@ -40,7 +41,7 @@ internal fun SelfMessageBubble(
             color = NivTheme.colorScheme.onSecondaryContainer
         )
         Text(
-            text = message.date,
+            text = message.date.localized(),
             style = NivTheme.typography.labelMedium,
             modifier = Modifier.padding(top = 6.dp)
         )

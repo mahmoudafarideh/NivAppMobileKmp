@@ -60,6 +60,7 @@ fun SubmitTicketDialog(
                     Text(text = subjectError.orEmpty())
                 }
             },
+            maxLines = 1
         )
         OutlinedTextField(
             value = state.message,
@@ -75,6 +76,7 @@ fun SubmitTicketDialog(
                     Text(text = messageError.orEmpty())
                 }
             },
+            maxLines = 2
         )
 
         NivButton(

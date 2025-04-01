@@ -39,7 +39,7 @@ internal fun UserTicketDetails.toTicketDetailsUiModel() = TicketDetailsUiModel(
     closed = closed
 )
 
-private fun UserTicketMessage.toTicketMessageUiModel() = TicketMessageUiModel(
+internal fun UserTicketMessage.toTicketMessageUiModel() = TicketMessageUiModel(
     content = content,
     date = date,
     sender = when (sender) {

@@ -10,7 +10,7 @@ data class SubmitTicketUiModel(
     val categories: ImmutableList<CategoryUiModel>,
     val subject: String = "",
     val message: String = "",
-    val state: DeferredData<Unit> = ReadyToFetch,
+    val state: DeferredData<Long> = ReadyToFetch,
 ) {
     data class CategoryUiModel(
         val id: Long,

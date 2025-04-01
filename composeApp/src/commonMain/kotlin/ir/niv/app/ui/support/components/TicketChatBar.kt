@@ -19,15 +19,15 @@ import androidx.compose.ui.unit.dp
 import ir.niv.app.ui.components.IconButton
 import ir.niv.app.ui.theme.theme.NivTheme
 import nivapp.composeapp.generated.resources.Res
-import nivapp.composeapp.generated.resources.login_phone_input
 import nivapp.composeapp.generated.resources.paper_plane_top_24
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringResource
 
 
 @Suppress("MemberExtensionConflict")
 @Composable
 internal fun TicketChatBar(
+    onMessageSend: (String) -> Unit,
+    enable: Boolean,
     modifier: Modifier = Modifier
 ) {
     var message by remember { mutableStateOf("") }
@@ -42,13 +42,11 @@ internal fun TicketChatBar(
             },
             modifier = Modifier.weight(1f),
             placeholder = {
-                Text(text = stringResource(Res.string.login_phone_input))
+                Text(text = "پیام خود را بنویسید...")
             },
             shape = NivTheme.shapes.extraLarge,
-            isError = false,
-            supportingText = {
-
-            }
+            enabled = enable,
+            supportingText = {}
         )
         AnimatedVisibility(
             visible = message.isNotBlank(),
@@ -57,7 +55,10 @@ internal fun TicketChatBar(
         ) {
             IconButton(
                 painter = painterResource(Res.drawable.paper_plane_top_24),
-                onClick = { },
+                onClick = {
+                    onMessageSend(message)
+                    message = ""
+                },
                 modifier = Modifier.padding(bottom = 12.dp).padding(start = 8.dp).rotate(180f),
                 backgroundColor = NivTheme.colorScheme.tertiaryContainer,
                 contentColor = NivTheme.colorScheme.onTertiaryContainer
