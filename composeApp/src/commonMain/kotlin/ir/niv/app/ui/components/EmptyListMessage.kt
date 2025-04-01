@@ -1,6 +1,7 @@
 package ir.niv.app.ui.components
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -31,10 +32,14 @@ fun EmptyListMessage(
     message: String,
     buttonLabel: String,
     onButtonClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues(0.dp)
 ) {
     Column(
-        modifier = modifier.padding(24.dp).fillMaxWidth(),
+        modifier = modifier.padding(
+            bottom = paddingValues.calculateBottomPadding(),
+            top = paddingValues.calculateTopPadding()
+        ).padding(24.dp).fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
         Icon(

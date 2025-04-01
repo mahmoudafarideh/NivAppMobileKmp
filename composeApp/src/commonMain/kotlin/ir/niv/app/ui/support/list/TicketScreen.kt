@@ -1,6 +1,7 @@
 package ir.niv.app.ui.support.list
 
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyListState
@@ -9,6 +10,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -42,6 +44,7 @@ fun TicketScreen(
     tickets: ContinuousDeferredData<ImmutableList<TicketUiModel>>,
     listState: LazyListState,
     onRetryClick: () -> Unit,
+    onRefresh: () -> Unit,
     onNewButtonClick: () -> Unit,
     onItemClick: (Long) -> Unit,
     onBackButtonClick: () -> Unit,
@@ -74,7 +77,11 @@ fun TicketScreen(
                 is InitialFailedApi -> {
                     ConnectLost(
                         onRetryClick = onRetryClick,
-                        modifier = Modifier.align(Alignment.Center)
+                        modifier = Modifier.align(Alignment.Center),
+                        paddingValues = PaddingValues(
+                            bottom = it.calculateTopPadding(),
+                            top = it.calculateBottomPadding()
+                        )
                     )
                 }
 
@@ -92,16 +99,27 @@ fun TicketScreen(
                                 message = "هیچ پیامی ثبت نکرده‌اید! برای ارسال پیام جدید به پشتیبانی روی دکمه زیر کلیک کنید.",
                                 buttonLabel = "ارسال پیام جدید",
                                 onButtonClick = {},
-                                modifier = Modifier.align(Alignment.Center)
+                                modifier = Modifier.align(Alignment.Center),
+                                paddingValues = PaddingValues(
+                                    bottom = it.calculateTopPadding(),
+                                    top = it.calculateBottomPadding()
+                                )
+                            )
+                        } else {
+                            PullToRefreshBox(
+                                isRefreshing = false,
+                                onRefresh = onRefresh,
+                                content = {
+                                    TicketsList(
+                                        items = items,
+                                        onItemClick = onItemClick,
+                                        tickets = tickets,
+                                        onRetryClick = onRetryClick,
+                                        listState = listState
+                                    )
+                                }
                             )
                         }
-                        TicketsList(
-                            items = items,
-                            onItemClick = onItemClick,
-                            tickets = tickets,
-                            onRetryClick = onRetryClick,
-                            listState = listState
-                        )
                     }
                 }
             }
@@ -136,6 +154,7 @@ private fun TicketScreenPreview() {
             onNewButtonClick = {},
             onBackButtonClick = {},
             listState = rememberLazyListState(),
+            onRefresh = {}
         )
     }
 }

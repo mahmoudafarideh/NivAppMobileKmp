@@ -4,6 +4,7 @@ import ir.niv.app.domain.support.SupportRepository
 import ir.niv.app.domain.support.TicketCategory
 import ir.niv.app.ui.core.BaseViewModel
 import ir.niv.app.ui.core.Retrieved
+import ir.niv.app.ui.core.isLoading
 import kotlinx.collections.immutable.toImmutableList
 
 class TicketsViewModel(
@@ -45,5 +46,11 @@ class TicketsViewModel(
                 }
             }
         }
+    }
+
+    fun refreshRequested() {
+        if(currentState.tickets.isLoading) return
+        updateState { TicketsUiModel() }
+        getTickets()
     }
 }

@@ -1,4 +1,4 @@
-package ir.niv.app.ui.support.list
+package ir.niv.app.ui.support
 
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.runtime.getValue
@@ -6,6 +6,12 @@ import androidx.compose.ui.window.DialogProperties
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
 import ir.niv.app.ui.core.DialogLayout
+import ir.niv.app.ui.support.details.TicketDetailsRoute
+import ir.niv.app.ui.support.details.TicketDetailsViewModel
+import ir.niv.app.ui.support.details.routes.screen
+import ir.niv.app.ui.support.list.SupportTicketsRoute
+import ir.niv.app.ui.support.list.TicketScreen
+import ir.niv.app.ui.support.list.TicketsViewModel
 import ir.niv.app.ui.support.list.routes.screen
 import ir.niv.app.ui.support.submit.SubmitTicketDialog
 import ir.niv.app.ui.support.submit.SubmitTicketRoute
@@ -16,6 +22,7 @@ import ir.niv.app.ui.utils.InfiniteListScrollDown
 import m.a.compilot.navigation.controller.LocalNavController
 import m.a.compilot.navigation.controller.comPilotNavController
 import org.koin.compose.viewmodel.koinViewModel
+import org.koin.core.parameter.parametersOf
 
 fun NavGraphBuilder.supportTicketsGraph() {
     SupportTicketsRoute.screen(this) {
@@ -41,6 +48,9 @@ fun NavGraphBuilder.supportTicketsGraph() {
             listState = listState,
             onNewButtonClick = {
                 navigation.safeNavigate().navigate(SubmitTicketRoute.navigator)
+            },
+            onRefresh = {
+                viewModel.refreshRequested()
             }
         )
     }
@@ -81,5 +91,10 @@ fun NavGraphBuilder.supportTicketsGraph() {
                 navigation.safePopBackStack()
             }
         )
+    }
+
+    TicketDetailsRoute.screen(this) {
+        val viewModel: TicketDetailsViewModel = koinViewModel { parametersOf(it.argument.id) }
+
     }
 }

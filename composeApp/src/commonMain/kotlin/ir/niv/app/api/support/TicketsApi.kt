@@ -10,6 +10,7 @@ import ir.niv.app.di.ApiV1
 
 private const val TicketsUrl = ApiV1 + "tickets/?page="
 private const val AddTicketUrl = ApiV1 + "addticket/"
+private const val TicketDetailsUrl = ApiV1 + "ticket/"
 
 class TicketsApi(private val client: HttpClient) {
 
@@ -29,4 +30,7 @@ class TicketsApi(private val client: HttpClient) {
                 append("message", message)
             }
         ).body()
+
+    suspend fun getTicket(id: Long): TicketDetailsDto = client
+        .get(urlString = "$TicketDetailsUrl$id/").body()
 }

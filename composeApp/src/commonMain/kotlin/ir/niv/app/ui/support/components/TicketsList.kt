@@ -71,7 +71,7 @@ internal fun TicketsList(
             when (tickets) {
                 is ContinuousFailedApi<*> -> {
                     ConnectLost(
-                        onRetryClick = onRetryClick
+                        onRetryClick = onRetryClick,
                     )
                 }
 
