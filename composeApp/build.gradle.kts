@@ -101,6 +101,8 @@ kotlin {
             implementation(libs.koin.android.compose)
 
             implementation(libs.ktor.client.android)
+
+            implementation("org.maplibre.gl:android-sdk:11.5.1")
         }
     }
 }

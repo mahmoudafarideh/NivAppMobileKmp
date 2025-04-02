@@ -5,7 +5,10 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>نیواپ</title>
         <link rel="manifest" href="manifest.json?v=0.09">
+        <link href="https://unpkg.com/maplibre-gl@^5.3.0/dist/maplibre-gl.css" rel="stylesheet"/>
         <script src="skiko.js"></script>
+        <script src="https://unpkg.com/maplibre-gl@^5.3.0/dist/maplibre-gl.js"></script>
+
         <style>
             html,
             body {
@@ -17,6 +20,16 @@
             }
         </style>
     </head>
-    <body></body>
+    <body>
+    <div id="map"></div>
+    </body>
+    <script>
+        var map = new maplibregl.Map({
+            container: 'map', // container id
+            style: 'https://demotiles.maplibre.org/style.json', // style URL
+            center: [0, 0], // starting position [lng, lat]
+            zoom: 1 // starting zoom
+        });
+    </script>
     <script src="composeApp.js"></script>
 </html>
