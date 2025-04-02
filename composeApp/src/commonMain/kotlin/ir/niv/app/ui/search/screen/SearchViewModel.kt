@@ -5,15 +5,12 @@ import ir.niv.app.domain.search.SearchRepository
 import ir.niv.app.ui.core.BaseViewModel
 import ir.niv.app.ui.core.ReadyToInitialFetch
 import ir.niv.app.ui.core.immutableMap
-import ir.niv.app.ui.utils.logInfo
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
@@ -42,11 +39,10 @@ class SearchViewModel(
                 }
                 .debounce(500)
                 .flatMapLatest {
-                    if(it == null) return@flatMapLatest flowOf()
+                    if (it == null) return@flatMapLatest flowOf()
                     getContinuosDeferredDataFlow(
                         currentState = currentState.gyms,
                         action = { page, limit ->
-                            delay(2_000)
                             searchRepository.search(query = it, page = page)
                         },
                         hasNext = { searchResult ->
