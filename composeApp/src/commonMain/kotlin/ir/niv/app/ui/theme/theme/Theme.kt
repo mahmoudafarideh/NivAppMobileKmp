@@ -1,7 +1,6 @@
 package ir.niv.app.ui.theme.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Shapes
 import androidx.compose.material3.Typography
@@ -11,6 +10,8 @@ import androidx.compose.runtime.ReadOnlyComposable
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.LayoutDirection
+import androidx.navigation.compose.rememberNavController
+import m.a.compilot.navigation.controller.LocalNavController
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.vazirmatn_bold
 import nivapp.composeapp.generated.resources.vazirmatn_medium
@@ -48,8 +49,10 @@ fun NivTheme(
 @Composable
 fun NivThemePreview(content: @Composable () -> Unit) {
     CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        NivTheme {
-            content()
+        CompositionLocalProvider(LocalNavController provides rememberNavController()) {
+            NivTheme {
+                content()
+            }
         }
     }
 }

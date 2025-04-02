@@ -30,38 +30,38 @@ data class HomeGridItemUiModel(
         Gym(
             Res.string.home_grid_gym_label,
             Res.drawable.stationary_bike_24,
-            Color(0xFFcefce1),
             Color(0xFF28af62),
+            Color(0xFFffffff),
         ),
         Workout(
             Res.string.home_grid_workout_label,
             Res.drawable.dumbbell_fitness_24,
-            Color(0xFFfacfd6),
             Color(0xFFf33d5b),
+            Color(0xFFffffff),
         ),
         Food(
             Res.string.home_grid_food_label,
             Res.drawable.apple_whole_24,
-            Color(0xFFd2e3fa),
             Color(0xFF3080ed),
+            Color(0xFFffffff),
         ),
         Coach(
             Res.string.home_grid_coach_label,
             Res.drawable.user_coach_24,
-            Color(0xFFd7d7f9),
             Color(0xFF5556ce),
+            Color(0xFFffffff),
         ),
         Exercise(
             Res.string.home_grid_exercise_label,
             Res.drawable.gym_24,
-            Color(0xFFfbd2e1),
             Color(0xFFb3446c),
+            Color(0xFFffffff),
         ),
         Friend(
             Res.string.home_grid_friend_label,
             Res.drawable.users_24,
-            Color(0xFFf2d9fb),
             Color(0xFFaa20dd),
+            Color(0xFFffffff),
         ),
     }
 

@@ -24,6 +24,36 @@ fun TicketChatBubblesShimmer(
     modifier: Modifier = Modifier
 ) {
     Column(modifier = modifier) {
+        Column(
+            modifier = modifier.fillMaxWidth().padding(
+                start = 16.dp,
+                bottom = 16.dp,
+                end = 32.dp
+            ).shimmer(),
+        ) {
+            Spacer(
+                modifier = Modifier
+                    .clip(
+                        RoundedCornerShape(
+                            12.dp,
+                            2.dp,
+                            12.dp,
+                            12.dp
+                        )
+                    )
+                    .background(NivTheme.colorScheme.secondaryContainer)
+                    .padding(16.dp)
+                    .fillMaxWidth()
+            )
+            Spacer(
+                modifier = Modifier
+                    .padding(top = 8.dp)
+                    .clip(NivTheme.shapes.large)
+                    .background(NivTheme.colorScheme.outlineVariant)
+                    .padding(8.dp)
+                    .width(32.dp)
+            )
+        }
         Row(
             modifier = modifier.fillMaxWidth().padding(
                 end = 16.dp,
@@ -65,36 +95,6 @@ fun TicketChatBubblesShimmer(
                     .size(38.dp)
                     .clip(CircleShape)
                     .background(NivTheme.colorScheme.outlineVariant)
-            )
-        }
-        Column(
-            modifier = modifier.fillMaxWidth().padding(
-                start = 16.dp,
-                bottom = 16.dp,
-                end = 32.dp
-            ).shimmer(),
-        ) {
-            Spacer(
-                modifier = Modifier
-                    .clip(
-                        RoundedCornerShape(
-                            12.dp,
-                            2.dp,
-                            12.dp,
-                            12.dp
-                        )
-                    )
-                    .background(NivTheme.colorScheme.secondaryContainer)
-                    .padding(16.dp)
-                    .fillMaxWidth()
-            )
-            Spacer(
-                modifier = Modifier
-                    .padding(top = 8.dp)
-                    .clip(NivTheme.shapes.large)
-                    .background(NivTheme.colorScheme.outlineVariant)
-                    .padding(8.dp)
-                    .width(32.dp)
             )
         }
     }

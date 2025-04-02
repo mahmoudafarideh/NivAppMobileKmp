@@ -7,14 +7,22 @@ import ir.niv.app.ui.utils.traceErrorException
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flatMapMerge
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -64,8 +72,8 @@ open class BaseViewModel<T>(
                 logInfo("SXO", it)
                 val apiError = traceErrorException(it)
                 apiError.errors?.let { errors ->
-                    _responseUiState.update {
-                        it.copy(inputErrors = errors.takeIf { it.isNotEmpty() })
+                    _responseUiState.update { response ->
+                        response.copy(inputErrors = errors.takeIf { it.isNotEmpty() })
                     }
                 }
                 apiError.toast?.let {
@@ -76,40 +84,72 @@ open class BaseViewModel<T>(
         }
     }
 
-    protected fun <T> getContinuosDeferredData(
-        currentState: ContinuousDeferredData<ImmutableList<T>>,
-        action: suspend (page: Int, limit: Int) -> ImmutableList<T>,
-        data: (ContinuousDeferredData<ImmutableList<T>>) -> Unit
+    protected fun <T, U> getContinuosDeferredData(
+        currentState: ContinuousDeferredData<ImmutableList<U>>,
+        action: suspend (page: Int, limit: Int) -> T,
+        data: (ContinuousDeferredData<ImmutableList<U>>) -> Unit,
+        hasNext: (T) -> Boolean,
+        transform: (T) -> ImmutableList<U>
     ) {
         if (currentState.isLoading) return
         if (currentState.isEnded) return
         data(currentState.loading())
         viewModelScope.launch(Dispatchers.Default) {
             runCatching {
-                _responseUiState.update {
-                    it.copy(inputErrors = null)
-                }
                 action(currentState.page, currentState.limit)
             }.onSuccess {
                 data(
                     currentState.retrieved(
-                        (currentState.data.orEmpty() + it).toImmutableList(),
-                        it.size < currentState.limit
+                        (currentState.data.orEmpty() + transform(it)).toImmutableList(),
+                        hasNext(it)
                     )
                 )
             }.onFailure {
                 logInfo("SXO", it)
                 val apiError = traceErrorException(it)
-                apiError.errors?.let { errors ->
-                    _responseUiState.update { it ->
-                        it.copy(inputErrors = errors.takeIf { it -> it.isNotEmpty() })
-                    }
-                }
                 apiError.toast?.let { it ->
                     _toastUiStateFlow.tryEmit(it.toUiModel())
                 }
                 data(currentState.failed(apiError))
             }
+        }
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    protected fun <T, U> getContinuosDeferredDataFlow(
+        currentState: ContinuousDeferredData<ImmutableList<U>>,
+        action: suspend (page: Int, limit: Int) -> T,
+        hasNext: (T) -> Boolean,
+        transform: (T) -> ImmutableList<U>,
+        retryFlow: Flow<Unit>,
+        reachEndFlow: Flow<Unit>
+    ): Flow<ContinuousDeferredData<ImmutableList<U>>> {
+        return channelFlow {
+            var latestState: ContinuousDeferredData<ImmutableList<U>>
+            if (currentState.isLoading) return@channelFlow
+            if (currentState.isEnded) return@channelFlow
+            latestState = currentState.loading()
+            send(latestState)
+            merge(flowOf(Unit), retryFlow, reachEndFlow).collectLatest {
+                    runCatching {
+                        action(latestState.page, latestState.limit)
+                    }.onSuccess {
+                        latestState = latestState.retrieved(
+                            (latestState.data.orEmpty() + transform(it)).toImmutableList(),
+                            hasNext(it)
+                        )
+                        send(latestState)
+                    }.onFailure {
+                        logInfo("SXO", it)
+                        val apiError = traceErrorException(it)
+                        apiError.toast?.let { it ->
+                            _toastUiStateFlow.tryEmit(it.toUiModel())
+                        }
+                        latestState = latestState.failed(apiError)
+                        send(latestState)
+                    }
+                }
+            awaitClose()
         }
     }
 

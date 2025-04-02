@@ -20,7 +20,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.unit.dp
 import ir.niv.app.ui.components.IconButton
 import ir.niv.app.ui.theme.theme.NivTheme
-import ir.niv.app.ui.utils.logInfo
+import ir.niv.app.ui.theme.theme.extendedColors
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -58,7 +58,6 @@ internal fun HomeSearchBar(
                     .weight(1f)
                     .clip(CircleShape)
                     .clickable {
-                        logInfo("SXO", "HERE 55")
                         onSearchClick()
                     }
                     .background(NivTheme.colorScheme.secondaryContainer),
@@ -68,7 +67,9 @@ internal fun HomeSearchBar(
         IconButton(
             imageVector = Icons.Outlined.Map,
             modifier = Modifier.padding(start = 16.dp, end = 6.dp),
-            onClick = onMapClick
+            onClick = onMapClick,
+            backgroundColor = NivTheme.extendedColors.success.colorContainer,
+            contentColor = NivTheme.extendedColors.success.onColorContainer
         )
     }
 }

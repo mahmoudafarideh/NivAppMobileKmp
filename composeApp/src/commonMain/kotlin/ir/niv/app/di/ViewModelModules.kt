@@ -3,6 +3,7 @@ package ir.niv.app.di
 import ir.niv.app.ui.AppViewModel
 import ir.niv.app.ui.home.screen.HomeViewModel
 import ir.niv.app.ui.login.screen.LoginViewModel
+import ir.niv.app.ui.search.screen.SearchViewModel
 import ir.niv.app.ui.splash.screen.SplashViewModel
 import ir.niv.app.ui.support.details.TicketDetailsViewModel
 import ir.niv.app.ui.support.list.TicketsViewModel
@@ -18,4 +19,5 @@ val viewModels = module {
     viewModelOf(::TicketsViewModel)
     viewModelOf(::SubmitTicketViewModel)
     viewModelOf(::TicketDetailsViewModel)
+    viewModelOf(::SearchViewModel)
 }

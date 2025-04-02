@@ -16,7 +16,9 @@ import io.ktor.client.request.forms.submitForm
 import io.ktor.client.statement.HttpReceivePipeline
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
+import io.ktor.client.statement.request
 import io.ktor.http.ContentType
+import io.ktor.http.fullPath
 import io.ktor.http.parameters
 import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
 import io.ktor.serialization.kotlinx.json.json
@@ -114,7 +116,9 @@ val networkModules = module {
             }
         }.apply {
             receivePipeline.intercept(HttpReceivePipeline.Before) {
-                logInfo("SXO", it.bodyAsText())
+                logInfo("SXO", "Status code is ${it.status.value}")
+                logInfo("SXO", "Request url is ${it.request.url.host} ${it.request.url.fullPath}")
+                logInfo("SXO", "Response is ${it.bodyAsText()}")
                 if (it.status.value == 200) {
                     val responseBody = it.bodyAsText()
                     val json = get<Json>().parseToJsonElement(responseBody).jsonObject

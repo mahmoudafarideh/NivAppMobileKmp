@@ -21,7 +21,7 @@ fun IconButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
     backgroundColor: Color = Color.Unspecified,
-    contentColor: Color = NivTheme.colorScheme.primary
+    contentColor: Color = NivTheme.colorScheme.primary,
 ) {
     Icon(
         painter = painter,
@@ -43,13 +43,16 @@ fun IconButton(
     imageVector: ImageVector,
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    backgroundColor: Color = Color.Unspecified,
+    contentColor: Color = NivTheme.colorScheme.primary,
 ) {
     Icon(
         imageVector = imageVector,
-        tint = NivTheme.colorScheme.primary,
+        tint = contentColor,
         contentDescription = null,
         modifier = modifier
             .clip(CircleShape)
+            .background(backgroundColor)
             .clickable {
                 onClick()
             }

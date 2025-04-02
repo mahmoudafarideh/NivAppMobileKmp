@@ -30,10 +30,10 @@ import org.jetbrains.compose.ui.tooling.preview.Preview
 fun EmptyListMessage(
     icon: Painter,
     message: String,
-    buttonLabel: String,
-    onButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
-    paddingValues: PaddingValues = PaddingValues(0.dp)
+    paddingValues: PaddingValues = PaddingValues(0.dp),
+    buttonLabel: String?,
+    onButtonClick: () -> Unit = {},
 ) {
     Column(
         modifier = modifier.padding(
@@ -54,12 +54,14 @@ fun EmptyListMessage(
             textAlign = TextAlign.Center
         )
         Spacer(modifier = Modifier.size(16.dp))
-        NivButton(
-            label = buttonLabel,
-            onClick = onButtonClick,
-            size = NivButtonSize.Small,
-            modifier = Modifier.widthIn(max = 124.dp)
-        )
+        buttonLabel?.let {
+            NivButton(
+                label = it,
+                onClick = onButtonClick,
+                size = NivButtonSize.Small,
+                modifier = Modifier.widthIn(max = 124.dp)
+            )
+        }
     }
 }
 

@@ -10,9 +10,12 @@ data class UserTicketListDto(
     val tickets: List<UserTicketDto>,
     @SerialName("tickets_category")
     val categories: List<TicketCategoryDto>,
+    @SerialName("has_next")
+    val hasNext: Boolean,
 )
 
 internal fun UserTicketListDto.toUserTicketList() = UserTicketList(
     tickets = tickets.map { it.toUserTicket() },
-    categories = categories.map { it.toTicketCategory() }
+    categories = categories.map { it.toTicketCategory() },
+    hasNext = hasNext
 )

@@ -28,9 +28,13 @@ import ir.niv.app.ui.home.components.HomeAppBar
 import ir.niv.app.ui.home.components.HomeSearchBar
 import ir.niv.app.ui.home.models.HomeGridItemUiModel
 import ir.niv.app.ui.home.models.UserUiModel
+import ir.niv.app.ui.search.graph.SearchRoute
+import ir.niv.app.ui.search.graph.routes.navigator
 import ir.niv.app.ui.theme.shape.squircle.SquircleShape
 import ir.niv.app.ui.theme.theme.NivTheme
 import ir.niv.app.ui.theme.theme.NivThemePreview
+import m.a.compilot.navigation.controller.LocalNavController
+import m.a.compilot.navigation.controller.comPilotNavController
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
@@ -42,6 +46,7 @@ fun HomeScreen(
     grid: List<HomeGridItemUiModel>,
     modifier: Modifier = Modifier,
 ) {
+    val navigation = LocalNavController.comPilotNavController
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -60,7 +65,9 @@ fun HomeScreen(
                 HomeSearchBar(
                     modifier = Modifier.fillMaxWidth()
                         .padding(start = 16.dp, end = 4.dp, top = 24.dp, bottom = 16.dp),
-                    onSearchClick = {},
+                    onSearchClick = {
+                        navigation.navigate(SearchRoute.navigator)
+                    },
                     onMapClick = {}
                 )
             }

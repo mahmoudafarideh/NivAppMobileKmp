@@ -19,13 +19,17 @@ class TicketsViewModel(
         getContinuosDeferredData(
             currentState = currentState.tickets,
             action = { page, limit ->
-                supportRepository.getTickets(page).let {
-                    updateCategories(it.categories)
-                    it.tickets.map { it -> it.toTicketUiModel() }.toImmutableList()
-                }
+                supportRepository.getTickets(page)
             },
             data = {
                 updateState { copy(tickets = it) }
+            },
+            hasNext = {
+                it.hasNext
+            },
+            transform = {
+                updateCategories(it.categories)
+                it.tickets.map { it -> it.toTicketUiModel() }.toImmutableList()
             }
         )
     }
