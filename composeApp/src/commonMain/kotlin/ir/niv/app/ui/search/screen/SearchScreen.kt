@@ -39,6 +39,7 @@ fun SearchScreen(
     query: String,
     queryLimit: Boolean,
     onQueryChange: (String) -> Unit,
+    onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -46,7 +47,8 @@ fun SearchScreen(
         topBar = {
             SearchAppBar(
                 query = query,
-                onQueryChange = onQueryChange
+                onQueryChange = onQueryChange,
+                onBackButtonClick = onBackButtonClick
             )
         }
     ) {
@@ -123,7 +125,8 @@ private fun SearchScreenPreview() {
             query = "",
             queryLimit = false,
             onQueryChange = {},
-            gyms = InitialFetching(1, 5)
+            gyms = InitialFetching(1, 5),
+            onBackButtonClick = {}
         )
     }
 }

@@ -26,6 +26,7 @@ import org.jetbrains.compose.resources.painterResource
 internal fun SearchAppBar(
     query: String,
     onQueryChange: (String) -> Unit,
+    onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
@@ -52,7 +53,7 @@ internal fun SearchAppBar(
         navigationIcon = {
             IconButton(
                 painter = painterResource(Res.drawable.arrow_small_right_24),
-                onClick = {}
+                onClick = onBackButtonClick
             )
         },
         actions = {

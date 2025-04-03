@@ -79,7 +79,6 @@ internal fun HomeAppBar(
                 painter = painterResource(Res.drawable.support_agent_24px),
                 modifier = Modifier.padding(4.dp),
                 onClick = {
-                    logInfo("SXO", "HERE IS HERE")
                     navigation.navigate(SupportTicketsRoute.navigator)
                 }
             )

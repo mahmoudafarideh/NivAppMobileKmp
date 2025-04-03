@@ -1,5 +1,5 @@
 [versions]
-agp = "8.11.0-alpha02"
+agp = "8.11.0-alpha03"
 android-compileSdk = "35"
 android-minSdk = "24"
 android-targetSdk = "35"
@@ -61,7 +61,7 @@ compilot-navigation = { group = "io.github.mahmoudafarideh.compilot.kmp", name =
 compilot-common = { group = "io.github.mahmoudafarideh.compilot.kmp", name = "common", version.ref = "compilot" }
 
 immutable-collections = { group="org.jetbrains.kotlinx", name="kotlinx-collections-immutable", version.ref="immutalbeCollections" }
-
+maplibre-compose = { module = "dev.sargunv.maplibre-compose:maplibre-compose", version = "0.6.0" }
 
 [plugins]
 androidApplication = { id = "com.android.application", version.ref = "agp" }

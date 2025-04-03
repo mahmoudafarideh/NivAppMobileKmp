@@ -8,15 +8,9 @@ import org.jetbrains.skiko.wasm.onWasmReady
 
 @OptIn(ExperimentalComposeUiApi::class)
 fun main() {
-    runCatching {
-        onWasmReady {
-            ComposeViewport(document.body!!) {
-                AppWithDI()
-            }
+    onWasmReady {
+        ComposeViewport(document.body!!) {
+            AppWithDI()
         }
-    }.onFailure {
-        logInfo("SXO", it.message.orEmpty())
-    }.onSuccess {
-        logInfo("SXO", "onSuccess")
     }
 }

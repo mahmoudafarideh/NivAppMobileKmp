@@ -2,17 +2,13 @@ package ir.niv.app.domain.search
 
 import ir.niv.app.domain.core.Avatar
 import ir.niv.app.domain.core.Gender
+import ir.niv.app.domain.core.LatLng
 
-data class SearchGym(
+data class MapSearchGym(
     val id: String,
     val avatar: Avatar,
-    val city: GymCity,
     val gender: Gender,
-    val genderLabel: String,
     val name: String,
-) {
-    data class GymCity(
-        val name: String,
-        val state: String,
-    )
-}
+    val latLng: LatLng,
+    val open: Boolean
+)
