@@ -1,12 +1,10 @@
 package ir.niv.app.ui.search.graph
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.getValue
-import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.NavGraphBuilder
-import ir.niv.app.ui.search.components.MapContainer
 import ir.niv.app.ui.search.graph.routes.screen
+import ir.niv.app.ui.search.screen.SearchMapScreen
 import ir.niv.app.ui.search.screen.SearchMapViewModel
 import ir.niv.app.ui.search.screen.SearchScreen
 import ir.niv.app.ui.search.screen.SearchViewModel
@@ -33,15 +31,28 @@ fun NavGraphBuilder.searchGraph() {
     }
 
     MapSearchRoute.screen(this) {
+        val navigation = LocalNavController.comPilotNavController
         val viewModel: SearchMapViewModel = koinViewModel()
         val state by viewModel.state.collectAsStateWithLifecycle()
-        MapContainer(
-            modifier = Modifier.fillMaxSize(),
-            markers = state.gyms,
+        SearchMapScreen(
+            onBackClick = {
+                navigation.safePopBackStack()
+            },
+            state = state,
             onCameraIdle = {
                 viewModel.cameraIdled(it)
             },
-            center = state.center
+            onUserLocationChanged = {
+                viewModel.userLocationChanged(it)
+            },
+            onUserLocationClick = {
+                viewModel.userLocationClicked()
+            },
+            center = viewModel.center,
+            onMarkerClicked = {
+                viewModel.markerClicked(it)
+            }
         )
+
     }
 }

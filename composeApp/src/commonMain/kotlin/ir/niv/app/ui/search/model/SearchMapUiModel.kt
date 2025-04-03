@@ -6,5 +6,6 @@ import kotlinx.collections.immutable.persistentListOf
 
 data class SearchMapUiModel(
     val center: LatLngUiModel = LatLngUiModel(35.73443, 51.356882),
-    val gyms: ImmutableList<GymMapUiModel> = persistentListOf()
+    val gyms: ImmutableList<GymMapUiModel> = persistentListOf(),
+    val showMyLocation: Boolean = false,
 )

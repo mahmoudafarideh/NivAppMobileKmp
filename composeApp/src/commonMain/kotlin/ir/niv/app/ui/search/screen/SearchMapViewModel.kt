@@ -5,12 +5,14 @@ import ir.niv.app.domain.search.SearchRepository
 import ir.niv.app.ui.core.BaseViewModel
 import ir.niv.app.ui.core.LatLngUiModel
 import ir.niv.app.ui.core.toLatLng
+import ir.niv.app.ui.search.model.GymMapUiModel
 import ir.niv.app.ui.search.model.SearchMapUiModel
 import ir.niv.app.ui.search.model.toGymMapUiModel
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flatMapLatest
@@ -21,6 +23,9 @@ class SearchMapViewModel(
 ) : BaseViewModel<SearchMapUiModel>(SearchMapUiModel()) {
 
     private val latLngFlow = MutableSharedFlow<LatLngUiModel>(extraBufferCapacity = 1)
+    private val centerFlow = MutableSharedFlow<LatLngUiModel>(extraBufferCapacity = 1)
+    val center = centerFlow.asSharedFlow()
+    private var userLocation: LatLngUiModel? = null
 
     init {
         getNearbyGyms()
@@ -53,5 +58,21 @@ class SearchMapViewModel(
         updateState {
             copy(center = latLng)
         }
+    }
+
+    fun userLocationChanged(lngUiModel: LatLngUiModel) {
+        userLocation = lngUiModel
+        updateState {
+            copy(showMyLocation = true)
+        }
+    }
+
+    fun userLocationClicked() {
+        val location = userLocation ?: return
+        centerFlow.tryEmit(location)
+    }
+
+    fun markerClicked(gymMapUiModel: GymMapUiModel) {
+        centerFlow.tryEmit(gymMapUiModel.latLng)
     }
 }

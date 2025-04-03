@@ -7,34 +7,30 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberUpdatedState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.lifecycle.DefaultLifecycleObserver
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import ir.niv.app.R
 import ir.niv.app.ui.core.LatLngUiModel
 import ir.niv.app.ui.search.model.GymMapUiModel
 import kotlinx.collections.immutable.ImmutableList
-import kotlinx.coroutines.async
-import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.suspendCancellableCoroutine
 import org.maplibre.android.MapLibre
 import org.maplibre.android.camera.CameraPosition
+import org.maplibre.android.camera.CameraUpdateFactory
 import org.maplibre.android.maps.MapLibreMap
 import org.maplibre.android.maps.MapView
 import org.maplibre.android.maps.Style
 import org.maplibre.android.plugins.annotation.Symbol
 import org.maplibre.android.plugins.annotation.SymbolManager
-import org.maplibre.android.plugins.annotation.SymbolOptions
 
 
 @SuppressLint("MissingPermission")
@@ -42,13 +38,17 @@ import org.maplibre.android.plugins.annotation.SymbolOptions
 actual fun MapContainer(
     modifier: Modifier,
     styleUrl: String,
-    center: LatLngUiModel,
+    center: Flow<LatLngUiModel>,
     zoom: Double,
     markers: ImmutableList<GymMapUiModel>,
     onCameraIdle: (LatLngUiModel) -> Unit,
+    onUserLocationChanged: (LatLngUiModel) -> Unit,
+    onMarkerClicked: (GymMapUiModel) -> Unit
 ) {
     val context = LocalContext.current
     val symbolManager = remember { mutableStateOf<Pair<Style, SymbolManager>?>(null) }
+    val attachedMarkers = remember { mutableStateOf(listOf<Pair<GymMapUiModel, Symbol>>()) }
+
     val mapView = remember {
         MapLibre.getInstance(context)
         MapView(context).apply {
@@ -57,12 +57,16 @@ actual fun MapContainer(
                 map.uiSettings.isLogoEnabled = false
                 map.uiSettings.isAttributionEnabled = false
                 map.setStyle(styleUrl)
-                map.getStyle {
-                    symbolManager.value = it to SymbolManager(this, map, it).apply {
+                map.getStyle { style ->
+                    symbolManager.value = style to SymbolManager(this, map, style).apply {
                         iconAllowOverlap = true
                         iconIgnorePlacement = true
-                        addClickListener {
-                            true
+                        addClickListener { symbol ->
+                            attachedMarkers.value.firstOrNull { it ->
+                                it.second == symbol
+                            }?.let { gym ->
+                                onMarkerClicked(gym.first)
+                            } != null
                         }
                     }
                 }
@@ -70,40 +74,8 @@ actual fun MapContainer(
         }
     }
 
-    val attachedMarkers = remember { mutableStateOf(listOf<Pair<String, Symbol>>()) }
-    LaunchedEffect(symbolManager.value, markers) {
-        val (style, symbolManager) = symbolManager.value ?: return@LaunchedEffect
-        attachedMarkers.value.filter {
-            it.first !in markers.map { gym -> gym.toString() }
-        }.let { items ->
-            items.forEach { (id, symbol) ->
-                style.removeImage(id)
-                symbolManager.delete(symbol)
-            }
-            attachedMarkers.value = attachedMarkers.value.filter { it !in items }
-        }
-        val markers = markers.filter {
-            it.toString() !in attachedMarkers.value.map { symbol -> symbol.first }
-        }.map {
-            async {
-                it to createMarkerBitmapWithBackground(
-                    context, it.avatar, R.drawable.livepin
-                )
-            }
-        }.awaitAll()
-        markers.forEach { (gym, bitmap) ->
-            val bitmap = bitmap ?: return@forEach
-            style.addImage(gym.toString(), bitmap)
-            val symbol = symbolManager.create(
-                SymbolOptions()
-                    .withLatLng(gym.latLng.toLatLng())
-                    .withIconImage(gym.toString())
-                    .withIconAnchor("bottom")
-            )
-            symbolManager.update(symbol)
-            attachedMarkers.value += gym.toString() to symbol
-        }
-    }
+    AttachMarkers(symbolManager, markers, context, attachedMarkers)
+
     val locationPermissionLauncher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.RequestPermission()
     ) { isGranted ->
@@ -119,8 +91,38 @@ actual fun MapContainer(
         }
     }
 
-    LaunchedEffect(Unit) {
+    GetUserLocation(mapView, onUserLocationChanged, zoom)
 
+    LaunchedEffect(Unit) {
+        center.collect {
+            mapView.getMapAsync { map ->
+                if (center == map.cameraPosition.target) return@getMapAsync
+                val position = CameraPosition.Builder()
+                    .target(it.toLatLng())
+                    .zoom(zoom)
+                    .build()
+                val cameraUpdate = CameraUpdateFactory.newCameraPosition(position)
+                map.animateCamera(cameraUpdate)
+            }
+        }
+
+    }
+
+    AndroidView(
+        factory = { mapView }, modifier = modifier
+    )
+
+    MapLifecycleHandler(mapView, onCameraIdle, symbolManager)
+}
+
+@Composable
+private fun GetUserLocation(
+    mapView: MapView,
+    onUserLocationChanged: (LatLngUiModel) -> Unit,
+    zoom: Double
+) {
+    val isMapMovedOnce = remember { mutableStateOf(false) }
+    LaunchedEffect(Unit) {
         while (isActive) {
             delay(200)
             val camera = suspendCancellableCoroutine {
@@ -135,36 +137,27 @@ actual fun MapContainer(
                 }
             }
             if (camera != null) {
-                mapView.getMapAsync { map ->
-                    val position =
-                        CameraPosition.Builder().target(camera.toLatLng()).zoom(zoom).build()
-                    map.cameraPosition = position
-                    this.cancel()
+                onUserLocationChanged(camera)
+                if (!isMapMovedOnce.value) {
+                    mapView.getMapAsync { map ->
+                        val position =
+                            CameraPosition.Builder().target(camera.toLatLng()).zoom(zoom).build()
+                        map.cameraPosition = position
+                        isMapMovedOnce.value = true
+                    }
                 }
             }
             delay(800)
         }
     }
-
-    val center by rememberUpdatedState(center)
-    LaunchedEffect(center) {
-        mapView.getMapAsync { map ->
-            val position = CameraPosition.Builder().target(center.toLatLng()).build()
-            map.cameraPosition = position
-        }
-    }
-
-    AndroidView(
-        factory = { mapView }, modifier = modifier
-    )
-
-    MapLifecycleHandler(mapView, onCameraIdle)
 }
+
 
 @Composable
 private fun MapLifecycleHandler(
     mapView: MapView,
-    onCameraIdle: (LatLngUiModel) -> Unit
+    onCameraIdle: (LatLngUiModel) -> Unit,
+    symbolManager: MutableState<Pair<Style, SymbolManager>?>
 ) {
     // Handle lifecycle
     val lifecycleOwner = LocalLifecycleOwner.current
@@ -175,7 +168,9 @@ private fun MapLifecycleHandler(
             override fun onResume(owner: LifecycleOwner) = mapView.onResume()
             override fun onPause(owner: LifecycleOwner) = mapView.onPause()
             override fun onStop(owner: LifecycleOwner) = mapView.onStop()
-            override fun onDestroy(owner: LifecycleOwner) = mapView.onDestroy()
+            override fun onDestroy(owner: LifecycleOwner) = mapView.onDestroy().also {
+                symbolManager.value?.second?.onDestroy()
+            }
         }
         var mapLibreMap: MapLibreMap? = null
         val cameraListener = MapLibreMap.OnCameraIdleListener {
@@ -194,9 +189,9 @@ private fun MapLifecycleHandler(
             lifecycle.removeObserver(observer)
             mapView.onDestroy()
             mapLibreMap?.removeOnCameraIdleListener(cameraListener)
+            symbolManager.value?.second?.onDestroy()
         }
     }
 }
-
 
 actual val mapEnabled: Boolean = true
