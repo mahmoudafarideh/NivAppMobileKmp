@@ -13,7 +13,7 @@ actual fun MapContainer(
     styleUrl: String,
     center: Flow<LatLngUiModel>,
     zoom: Double,
-    markers: ImmutableList<GymMapUiModel>,
+    markers: Flow<ImmutableList<GymMapUiModel>>,
     onCameraIdle: (LatLngUiModel) -> Unit,
     onUserLocationChanged: (LatLngUiModel) -> Unit,
     onMarkerClicked: (GymMapUiModel) -> Unit,

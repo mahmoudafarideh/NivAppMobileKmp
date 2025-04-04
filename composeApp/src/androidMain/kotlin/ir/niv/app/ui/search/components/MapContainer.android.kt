@@ -18,6 +18,7 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import ir.niv.app.ui.core.LatLngUiModel
 import ir.niv.app.ui.search.model.GymMapUiModel
+import ir.niv.app.ui.utils.logInfo
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -40,7 +41,7 @@ actual fun MapContainer(
     styleUrl: String,
     center: Flow<LatLngUiModel>,
     zoom: Double,
-    markers: ImmutableList<GymMapUiModel>,
+    markers: Flow<ImmutableList<GymMapUiModel>>,
     onCameraIdle: (LatLngUiModel) -> Unit,
     onUserLocationChanged: (LatLngUiModel) -> Unit,
     onMarkerClicked: (GymMapUiModel) -> Unit
@@ -50,6 +51,7 @@ actual fun MapContainer(
     val attachedMarkers = remember { mutableStateOf(listOf<Pair<GymMapUiModel, Symbol>>()) }
 
     val mapView = remember {
+        logInfo("SXOE", "CAME HERE")
         MapLibre.getInstance(context)
         MapView(context).apply {
             getMapAsync { map ->

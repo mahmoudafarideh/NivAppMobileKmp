@@ -20,6 +20,7 @@ import ir.niv.app.ui.search.components.MapContainer
 import ir.niv.app.ui.search.model.GymMapUiModel
 import ir.niv.app.ui.search.model.SearchMapUiModel
 import ir.niv.app.ui.theme.theme.NivTheme
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.flow.Flow
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.arrow_small_right_24
@@ -31,6 +32,7 @@ import org.jetbrains.compose.resources.painterResource
 @Composable
 fun SearchMapScreen(
     state: SearchMapUiModel,
+    gyms: Flow<ImmutableList<GymMapUiModel>>,
     onBackClick: () -> Unit,
     onUserLocationClick: () -> Unit,
     onCameraIdle: (LatLngUiModel) -> Unit,
@@ -61,7 +63,7 @@ fun SearchMapScreen(
         Box {
             MapContainer(
                 modifier = Modifier.fillMaxSize(),
-                markers = state.gyms,
+                markers = gyms,
                 onCameraIdle = onCameraIdle,
                 center = center,
                 onUserLocationChanged = onUserLocationChanged,

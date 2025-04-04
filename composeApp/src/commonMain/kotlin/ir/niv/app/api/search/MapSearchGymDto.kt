@@ -4,7 +4,6 @@ import ir.niv.app.di.BaseUrl
 import ir.niv.app.domain.core.Avatar
 import ir.niv.app.domain.core.LatLng
 import ir.niv.app.domain.search.MapSearchGym
-import ir.niv.app.domain.search.SearchGym
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -16,6 +15,8 @@ data class MapSearchGymDto(
     val avatar: String,
     @SerialName("gender_value")
     val gender: GenderDto,
+    @SerialName("gender")
+    val genderLabel: String,
     @SerialName("name")
     val name: String,
     @SerialName("open")
@@ -32,5 +33,6 @@ internal fun MapSearchGymDto.toDomain() = MapSearchGym(
     gender = gender.toGender(),
     name = name,
     latLng = LatLng(lat, lng),
-    open = open
+    open = open,
+    genderLabel = genderLabel
 )

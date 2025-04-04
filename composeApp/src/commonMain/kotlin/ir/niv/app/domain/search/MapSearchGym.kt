@@ -6,9 +6,10 @@ import ir.niv.app.domain.core.LatLng
 
 data class MapSearchGym(
     val id: String,
+    val name: String,
     val avatar: Avatar,
     val gender: Gender,
-    val name: String,
+    val genderLabel: String,
     val latLng: LatLng,
     val open: Boolean
 )
