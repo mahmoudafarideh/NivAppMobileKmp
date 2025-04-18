@@ -11,6 +11,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.LayoutDirection
 import androidx.navigation.compose.rememberNavController
+import ir.niv.app.ui.utils.LocalPreviewMode
 import m.a.compilot.navigation.controller.LocalNavController
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.vazirmatn_bold
@@ -48,11 +49,13 @@ fun NivTheme(
 
 @Composable
 fun NivThemePreview(content: @Composable () -> Unit) {
-    CompositionLocalProvider(LocalLayoutDirection provides LayoutDirection.Rtl) {
-        CompositionLocalProvider(LocalNavController provides rememberNavController()) {
-            NivTheme {
-                content()
-            }
+    CompositionLocalProvider(
+        LocalLayoutDirection provides LayoutDirection.Rtl,
+        LocalNavController provides rememberNavController(),
+        LocalPreviewMode provides true
+    ) {
+        NivTheme {
+            content()
         }
     }
 }

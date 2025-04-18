@@ -1,6 +1,7 @@
 package ir.niv.app.ui.home.components
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -20,10 +21,11 @@ import androidx.compose.ui.unit.dp
 import ir.niv.app.ui.components.IconButton
 import ir.niv.app.ui.components.UrlImage
 import ir.niv.app.ui.home.models.UserUiModel
+import ir.niv.app.ui.profile.graph.ProfileRoute
+import ir.niv.app.ui.profile.graph.routes.navigator
 import ir.niv.app.ui.support.list.SupportTicketsRoute
 import ir.niv.app.ui.support.list.routes.navigator
 import ir.niv.app.ui.theme.theme.NivTheme
-import ir.niv.app.ui.utils.logInfo
 import m.a.compilot.navigation.controller.LocalNavController
 import m.a.compilot.navigation.controller.comPilotNavController
 import nivapp.composeapp.generated.resources.Res
@@ -53,6 +55,9 @@ internal fun HomeAppBar(
                             .fillMaxHeight()
                             .clip(CircleShape)
                             .background(NivTheme.colorScheme.secondary)
+                            .clickable {
+                                navigation.safeNavigate().navigate(ProfileRoute.navigator)
+                            }
                     )
                     Spacer(modifier = Modifier.size(12.dp))
                     Column {

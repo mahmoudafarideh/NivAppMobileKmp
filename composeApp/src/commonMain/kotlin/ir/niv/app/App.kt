@@ -22,6 +22,7 @@ import ir.niv.app.ui.home.graph.homeGraph
 import ir.niv.app.ui.login.graph.LoginRoute
 import ir.niv.app.ui.login.graph.loginGraph
 import ir.niv.app.ui.login.graph.routes.navigator
+import ir.niv.app.ui.profile.graph.profileGraph
 import ir.niv.app.ui.search.graph.searchGraph
 import ir.niv.app.ui.splash.graph.SplashRoute
 import ir.niv.app.ui.splash.graph.routes.navigationRoute
@@ -67,6 +68,7 @@ fun App() {
                     homeGraph()
                     supportTicketsGraph()
                     searchGraph()
+                    profileGraph()
                 }
 
                 val appViewModel: AppViewModel = koinViewModel()

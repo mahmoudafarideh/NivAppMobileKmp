@@ -21,6 +21,10 @@ import ir.niv.app.ui.core.Failed
 import ir.niv.app.ui.core.Fetching
 import ir.niv.app.ui.core.ReadyToFetch
 import ir.niv.app.ui.core.Retrieved
+import ir.niv.app.ui.utils.LocalPreviewMode
+import nivapp.composeapp.generated.resources.Res
+import nivapp.composeapp.generated.resources.preview_avatar
+import org.jetbrains.compose.resources.painterResource
 
 @Composable
 fun UrlImage(
@@ -29,6 +33,14 @@ fun UrlImage(
     contentDescription: String? = null,
     failedContent: (@Composable () -> Unit)? = null,
 ) {
+    if (LocalPreviewMode.current) {
+        Image(
+            painter = painterResource(Res.drawable.preview_avatar),
+            contentDescription = null,
+            modifier = modifier
+        )
+        return
+    }
     val context = LocalPlatformContext.current
     val imageLoader: ImageLoader = remember {
         context.imageLoader()
