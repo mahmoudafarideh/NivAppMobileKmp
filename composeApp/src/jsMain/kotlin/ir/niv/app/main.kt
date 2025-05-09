@@ -2,7 +2,7 @@ package ir.niv.app
 
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.window.ComposeViewport
-import ir.niv.app.ui.home.graph.HomeRoute
+import ir.niv.app.ui.utils.logInfo
 import kotlinx.browser.document
 import org.jetbrains.skiko.wasm.onWasmReady
 

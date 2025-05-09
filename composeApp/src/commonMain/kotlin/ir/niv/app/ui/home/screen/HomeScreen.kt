@@ -28,6 +28,7 @@ import ir.niv.app.ui.home.components.HomeAppBar
 import ir.niv.app.ui.home.components.HomeSearchBar
 import ir.niv.app.ui.home.models.HomeGridItemUiModel
 import ir.niv.app.ui.home.models.UserUiModel
+import ir.niv.app.ui.search.graph.MapSearchRoute
 import ir.niv.app.ui.search.graph.SearchRoute
 import ir.niv.app.ui.search.graph.routes.navigator
 import ir.niv.app.ui.theme.shape.squircle.SquircleShape
@@ -68,7 +69,9 @@ fun HomeScreen(
                     onSearchClick = {
                         navigation.navigate(SearchRoute.navigator)
                     },
-                    onMapClick = {}
+                    onMapClick = {
+                        navigation.navigate(MapSearchRoute.navigator)
+                    }
                 )
             }
             items(

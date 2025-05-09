@@ -5,16 +5,12 @@ import io.ktor.client.call.body
 import io.ktor.client.request.forms.submitForm
 import io.ktor.client.request.get
 import io.ktor.client.request.parameter
-import io.ktor.client.request.post
 import io.ktor.http.parameters
-import ir.niv.app.api.core.CheckLoginDto
-import ir.niv.app.api.login.LoginDto
-import ir.niv.app.api.login.NumberRegisterDto
 import ir.niv.app.di.ApiV1
-import ir.niv.app.domain.core.PhoneNumber
-import ir.niv.app.domain.login.Otp
+import ir.niv.app.domain.core.LatLng
 
 private const val SearchUrl = ApiV1 + "search/"
+private const val MapSearchUrl = ApiV1 + "search/map/"
 
 class SearchApi(private val client: HttpClient) {
 
@@ -25,5 +21,16 @@ class SearchApi(private val client: HttpClient) {
             this.parameter("q", query)
             this.parameter("page", page)
         }.body()
+
+    suspend fun searchOnMap(
+        latLng: LatLng
+    ): MapSearchResultDto = client
+        .submitForm(
+            url = MapSearchUrl,
+            formParameters = parameters {
+                append("lat", latLng.lat.toString())
+                append("lon", latLng.lng.toString())
+            }
+        ).body()
 
 }

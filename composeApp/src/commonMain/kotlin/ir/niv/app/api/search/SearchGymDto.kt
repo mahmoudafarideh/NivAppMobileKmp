@@ -2,6 +2,7 @@ package ir.niv.app.api.search
 
 import ir.niv.app.di.BaseUrl
 import ir.niv.app.domain.core.Avatar
+import ir.niv.app.domain.core.Gender
 import ir.niv.app.domain.search.SearchGym
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -29,27 +30,13 @@ data class SearchGymDto(
         val state: String,
     )
 
-    enum class GenderDto {
-        @SerialName("men")
-        Men,
-
-        @SerialName("women")
-        Women,
-
-        @SerialName("both")
-        Both,
-    }
 }
 
 internal fun SearchGymDto.toDomain() = SearchGym(
     id = id,
     avatar = Avatar(BaseUrl + avatar),
     city = SearchGym.GymCity(name = city.name, state = city.state),
-    gender = when (gender) {
-        SearchGymDto.GenderDto.Men -> SearchGym.Gender.Men
-        SearchGymDto.GenderDto.Women -> SearchGym.Gender.Women
-        SearchGymDto.GenderDto.Both -> SearchGym.Gender.Both
-    },
+    gender = gender.toGender(),
     name = name,
     genderLabel = genderLabel,
 )

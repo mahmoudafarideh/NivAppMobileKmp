@@ -1,4 +1,3 @@
-import org.gradle.kotlin.dsl.project
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.targets.js.webpack.KotlinWebpackConfig
@@ -101,6 +100,10 @@ kotlin {
             implementation(libs.koin.android.compose)
 
             implementation(libs.ktor.client.android)
+
+            implementation("org.maplibre.gl:android-sdk:11.5.1")
+            implementation("org.maplibre.gl:android-plugin-annotation-v9:3.0.2")
+            implementation("com.google.android.gms:play-services-location:21.0.1")
         }
     }
 }

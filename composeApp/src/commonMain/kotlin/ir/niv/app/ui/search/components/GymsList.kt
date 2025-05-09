@@ -36,7 +36,6 @@ import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.persistentListOf
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.fi_sr_marker
-import nivapp.composeapp.generated.resources.fi_sr_person_simple
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -102,7 +101,7 @@ internal fun GymsList(
                                 item {
                                     Spacer(modifier = Modifier.size(16.dp))
                                     Icon(
-                                        painter = painterResource(Res.drawable.fi_sr_person_simple),
+                                        painter = painterResource(gym.gender.icon),
                                         tint = NivTheme.colorScheme.onSurfaceVariant,
                                         contentDescription = null,
                                         modifier = Modifier.size(16.dp)

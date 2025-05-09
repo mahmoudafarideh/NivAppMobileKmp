@@ -29,6 +29,7 @@ import kotlinx.collections.immutable.ImmutableList
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.comments_24
 import nivapp.composeapp.generated.resources.fi_sr_category
+import nivapp.composeapp.generated.resources.fi_sr_not_found_alt
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
 
@@ -39,6 +40,7 @@ fun SearchScreen(
     query: String,
     queryLimit: Boolean,
     onQueryChange: (String) -> Unit,
+    onBackButtonClick: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -46,7 +48,8 @@ fun SearchScreen(
         topBar = {
             SearchAppBar(
                 query = query,
-                onQueryChange = onQueryChange
+                onQueryChange = onQueryChange,
+                onBackButtonClick = onBackButtonClick
             )
         }
     ) {
@@ -90,7 +93,7 @@ fun SearchScreen(
                     gyms.data?.let { items ->
                         if (items.isEmpty()) {
                             EmptyListMessage(
-                                icon = painterResource(Res.drawable.comments_24),
+                                icon = painterResource(Res.drawable.fi_sr_not_found_alt),
                                 message = "هیچ باشگاهی یافت نشد!",
                                 buttonLabel = null,
                                 modifier = Modifier.align(Alignment.Center),
@@ -123,7 +126,8 @@ private fun SearchScreenPreview() {
             query = "",
             queryLimit = false,
             onQueryChange = {},
-            gyms = InitialFetching(1, 5)
+            gyms = InitialFetching(1, 5),
+            onBackButtonClick = {}
         )
     }
 }

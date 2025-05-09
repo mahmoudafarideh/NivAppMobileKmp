@@ -1,7 +1,7 @@
 package ir.niv.app.domain.search
 
 import ir.niv.app.domain.core.Avatar
-import kotlinx.serialization.SerialName
+import ir.niv.app.domain.core.Gender
 
 data class SearchGym(
     val id: String,
@@ -15,10 +15,4 @@ data class SearchGym(
         val name: String,
         val state: String,
     )
-
-    enum class Gender {
-        Men,
-        Women,
-        Both,
-    }
 }
