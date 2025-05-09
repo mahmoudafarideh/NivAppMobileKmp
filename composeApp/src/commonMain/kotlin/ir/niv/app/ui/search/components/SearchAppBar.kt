@@ -14,10 +14,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import ir.niv.app.ui.components.IconButton
 import ir.niv.app.ui.theme.theme.NivTheme
+import m.a.compilot.navigation.controller.LocalNavController
+import m.a.compilot.navigation.controller.comPilotNavController
 import nivapp.composeapp.generated.resources.Res
 import nivapp.composeapp.generated.resources.arrow_small_right_24
 import nivapp.composeapp.generated.resources.cross_small_24
-import nivapp.composeapp.generated.resources.fi_br_bars_filter
 import org.jetbrains.compose.resources.painterResource
 
 
@@ -28,6 +29,7 @@ internal fun SearchAppBar(
     onQueryChange: (String) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val navController = LocalNavController.comPilotNavController
     TopAppBar(
         modifier = modifier,
         title = {
@@ -52,7 +54,9 @@ internal fun SearchAppBar(
         navigationIcon = {
             IconButton(
                 painter = painterResource(Res.drawable.arrow_small_right_24),
-                onClick = {}
+                onClick = {
+                    navController.safePopBackStack()
+                }
             )
         },
         actions = {

@@ -61,9 +61,6 @@ kotlin {
                 implementation(libs.multiplatform.settings)
                 implementation(libs.multiplatform.settings.no.arg)
 
-                implementation(libs.koin.core)
-                implementation(libs.koin.compose)
-                implementation(libs.koin.compose.vm)
 
                 implementation(libs.ktor.client.core)
                 implementation(libs.ktor.client.content.negotiation)
@@ -82,6 +79,9 @@ kotlin {
                 implementation(libs.coil.compose)
                 implementation(libs.coil.network.ktor3)
                 implementation(libs.immutable.collections)
+                implementation(libs.koin.compose)
+                implementation(libs.koin.compose.vm)
+                implementation(libs.koin.core)
 
 
             }
