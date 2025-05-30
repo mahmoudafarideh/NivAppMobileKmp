@@ -82,7 +82,6 @@ kotlin {
                 implementation(libs.koin.compose.vm)
                 implementation(libs.koin.core)
 
-
             }
         }
         jsMain.dependencies {

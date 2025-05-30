@@ -2,6 +2,7 @@ package ir.niv.app.di
 
 import ir.niv.app.domain.core.UserRepository
 import ir.niv.app.domain.login.LoginRepository
+import ir.niv.app.domain.profile.crop.CropRepository
 import ir.niv.app.domain.repository.AuthRepository
 import ir.niv.app.domain.search.SearchRepository
 import ir.niv.app.domain.splash.SplashRepository
@@ -16,4 +17,5 @@ val domainModules = module {
     singleOf(::SplashRepository)
     singleOf(::SupportRepository)
     singleOf(::SearchRepository)
+    singleOf(::CropRepository)
 }
